@@ -1,1 +1,1 @@
-# D3 Project Starter Template
+# Video Game Sales Visualization
