@@ -1,9 +1,9 @@
 
  // EXAMPLE
  const bubbleChartConfig = {
-    svgElement: 'bubble-map-vis',
-    width: 500,
-    height: 200,
+    svgElementId: 'bubble-chart-vis',
+    width: 1000,
+    height: 400,
     margin: { left: 10, right: 10, top: 10, bottom: 10 }
 };
 
