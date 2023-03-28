@@ -7,7 +7,14 @@
     margin: { left: 10, right: 10, top: 10, bottom: 10 }
 };
 
-d3.csv('data/video_games.csv').then(data => {
+ const scatterPlotConfig = {
+     svgElement: '#scatter-plot-vis',
+     width: 400,
+     height: 725,
+     margin: {top: 25, right: 20, bottom: 20, left: 35}
+ };
+
+d3.csv('data/test_data.csv').then(data => {
 
     // Process the data
     data.forEach(e => {
@@ -22,4 +29,6 @@ d3.csv('data/video_games.csv').then(data => {
     console.log(data);
 
     const bubbleChart = new BubbleChart(bubbleChartConfig, data);
+    const scatterPlot = new ScatterPlot(scatterPlotConfig, data);
+    // const histogram = new HistogramChart(histogramConfig, data);
 });
