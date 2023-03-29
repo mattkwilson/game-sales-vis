@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "build": "npx tailwindcss -i ./css/style.css -o ./dist/style.css",
-    "start": "start npx tailwindcss -i ./css/style.css -o ./dist/style.css --watch & live-server",
+    "build": "npx tailwindcss -i ./css/tailwind.css -o ./dist/tailwind.css",
+    "start": "start npx tailwindcss -i ./css/tailwind.css -o ./dist/tailwind.css --watch & live-server",
     "dev-server": "live-server",
-    "tailwind": "npx tailwindcss -i ./css/style.css -o ./dist/style.css --watch"
+    "tailwind": "npx tailwindcss -i ./css/tailwind.css -o ./dist/tailwind.css --watch"
   },
   "devDependencies": {
     "tailwindcss": "^3.2.7"

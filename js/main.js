@@ -2,9 +2,10 @@
  // EXAMPLE
  const bubbleChartConfig = {
     svgElementId: 'bubble-chart-vis',
-    width: 1000,
+    width: 500,
     height: 400,
-    margin: { left: 10, right: 10, top: 10, bottom: 10 }
+    margin: { left: 10, right: 10, top: 10, bottom: 10 },
+    tooltipOffset: { x: 20, y: 10 }
 };
 
 d3.csv('data/video_games.csv').then(data => {
@@ -21,5 +22,24 @@ d3.csv('data/video_games.csv').then(data => {
     });
     console.log(data);
 
-    const bubbleChart = new BubbleChart(bubbleChartConfig, data);
+    let selectedElements = [];
+    const dispatch = d3.dispatch('selection-change', 'reset-selection');
+
+    const bubbleChart = new BubbleChart(bubbleChartConfig, data, dispatch);
+
+    dispatch.on('selection-change', element => {
+        if(selectedElements.includes(element)) {
+            selectedElements.splice(selectedElements.indexOf(element), 1);
+        } else {
+            selectedElements.push(element);
+        }
+        bubbleChart.selection = selectedElements;
+        bubbleChart.updateVis();
+    });
+
+    dispatch.on('reset-selection', d => {
+        selectedElements = [];
+        bubbleChart.selection = selectedElements;
+        bubbleChart.updateVis();
+    });
 });

@@ -4,14 +4,16 @@
 //  https://github.com/UBC-InfoVis/447-materials/tree/23Jan/tutorials/7_D3_Tutorial_Advanced_Concepts
 
 class BubbleChart {
-    constructor(config_, data_) {
+    constructor(config_, data_, dispatch_) {
         this.config = {
             svgElementId: config_.svgElementId,
             width: config_.width,
             height: config_.height,
-            margin: config_.margin
+            margin: config_.margin,
+            tooltipOffset: config_.tooltipOffset
         };
         this.data = data_;
+        this.dispatch = dispatch_;
         this.initVis();
     }
 
@@ -26,8 +28,7 @@ class BubbleChart {
         vis.svg = d3.select('#' + vis.config.svgElementId)
                         .attr('width', vis.config.width)
                         .attr('height', vis.config.height);
-        vis.chart = vis.svg.append('g').attr('transform', `translate(${vis.config.margin.left}, 
-                                                                        ${vis.config.margin.top})`);
+        vis.chart = vis.svg.append('g').attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
 
         // Ref: https://observablehq.com/@d3/color-schemes
         const colorPallette = ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"];
@@ -37,10 +38,13 @@ class BubbleChart {
         const genreNASales = d3.rollups(vis.data, g => d3.sum(g, d => d.NA_Sales), d => d.Genre);
         const genreEUSales = d3.rollups(vis.data, g => d3.sum(g, d => d.EU_Sales), d => d.Genre);
         const genreJPSales = d3.rollups(vis.data, g => d3.sum(g, d => d.JP_Sales), d => d.Genre);
-
         genreNASales.forEach(g => {
             vis.colorMap.set(g[0], colorPallette[vis.colorMap.size]);
         });
+        vis.colorMap.set('World', '#faf8f7');
+        vis.colorMap.set('North America', '#f5f3f2');
+        vis.colorMap.set('Europe', '#f5f3f2');
+        vis.colorMap.set('Japan', '#f5f3f2');
 
         const rawData = [
             {
@@ -87,13 +91,15 @@ class BubbleChart {
         
         d3.pack().size([vis.width, vis.height])(vis.hierarchy);
 
+        vis.selection = [];
+
+        vis.tooltip = d3.select('#tooltip');
+
         this.updateVis();
     }
 
     updateVis() {
         const vis = this;
-
-        // TODO: Add code for updating the visualization
 
         this.renderVis();
     }
@@ -101,13 +107,67 @@ class BubbleChart {
     renderVis() {
         const vis = this;
 
-        vis.chart.selectAll('.bubble')
-                        .data(vis.hierarchy)
-                        .join('circle')
+        const hierarchyData = vis.chart.selectAll('circle').data(vis.hierarchy);
+
+        hierarchyData.join('circle')
+                        .attr('class', d => {
+                            switch(d.id) {
+                                case 'World':
+                                    return 'bubble-world';
+                                case 'North America':
+                                case 'Europe':
+                                case 'Japan':
+                                    return 'bubble-region';
+                                default:
+                                    return vis.selection.includes(d) ? 'bubble-selected' : 'bubble';
+                            }
+                        })
                         .attr('cx', d => d.x)
                         .attr('cy', d => d.y)
                         .attr('r', d => d.r)
                         .attr('fill', d => vis.colorMap.get(d.id))
-                        .attr('opacity', d => d.id == "World" || d.id == "North America" || d.id == "Europe" || d.id == "Japan" ? 0.08 : 0.8);
+                        .on('click', (e, d) => {
+                            switch(d.id) {
+                                case 'World':
+                                case 'North America':
+                                case 'Europe':
+                                case 'Japan':
+                                    vis.dispatch.call('reset-selection', e, d);
+                                    break;
+                                default:
+                                    vis.dispatch.call('selection-change', e, d);
+                            }
+                        })
+                        .on('mouseenter', (e, d) => {
+                            if(!this.isInteractable(d)) {
+                                return;
+                            }
+                            vis.tooltip.style('display', 'block')
+                                .html(`<p><b>Genre:</b> ${d.id}</p> <p><b>Sales:</b> ${d3.format('$.0f')(Math.round(d.data.sales))} Million</p>`);
+
+                        })
+                        .on('mousemove', (e, d) => {
+                            if(!this.isInteractable(d)) {
+                                return;
+                            }
+                            vis.tooltip.style('left', (d.x + vis.config.margin.left + vis.config.tooltipOffset.x) + 'px')
+                                        .style('top', (d.y + vis.config.margin.top + vis.config.tooltipOffset.y) + 'px');
+                        })
+                        .on('mouseleave', (e, d) => {
+                            if(!this.isInteractable(d)) {
+                                return;
+                            }
+                            vis.tooltip.style('display', 'none');
+                        });
+
+        // hierarchyData.join('text')
+        //                 .attr('class', 'bubble-label')
+        //                 .text(d => d.id)
+        //                 .attr('x', d => d.x)
+        //                 .attr('y', d => d.y);
+    }
+
+    isInteractable(d) {
+        return !(d.id == 'World' || d.id == 'North America' || d.id == 'Europe' || d.id == 'Japan');
     }
 }

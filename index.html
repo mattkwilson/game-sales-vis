@@ -4,7 +4,9 @@
     <title>Video Game Sales</title>
     <meta charset="UTF-8">
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
-    <link rel="stylesheet" href="dist/style.css">
+    <link rel="stylesheet" href="dist/tailwind.css">
+    <link rel="stylesheet" href="css/bubbleChart.css">
+    <link rel="stylesheet" href="css/global.css">
 </head>
 <body>    
     <!-- Add HTML content, SVG drawing area, ... -->
@@ -12,6 +14,8 @@
         <h1 class="text-center font-bold text-3xl p-5">Video Game Sales</h1>
         <svg id="bubble-chart-vis"></svg>
     </div>
+    <div id="tooltip"></div>
+
     <!-- D3 bundle -->
     <script src="js/lib/d3.v6.min.js"></script>
     <script src="js/lib/d3-hierarchy.min.js"></script>
