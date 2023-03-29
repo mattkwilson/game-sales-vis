@@ -133,7 +133,7 @@ class StackedBarChart {
         console.log(vis.stackedData);
         
 
-        vis.chart.selectAll('category')
+        vis.chart.selectAll('.category')
         .data(vis.stackedData)
       .join('g')
         .attr('class', d => `category cat-${d.key}`)
@@ -144,6 +144,8 @@ class StackedBarChart {
         .attr('y', d => vis.yScale(d[1]))
         .attr('height', d => vis.yScale(d[0]) - vis.yScale(d[1]))
         .attr('width', vis.xScale.bandwidth());
+
+        
 
 
         vis.xAxisG
