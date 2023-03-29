@@ -9,12 +9,12 @@
 
 const barChartConfig = {
     svgElement: '#bar-chart-vis',
-    width: 800,
+    width: 1000,
     height: 200,
-    margin: {top: 25, right: 20, bottom: 20, left: 35}
+    margin: {top: 25, right: 20, bottom: 40, left: 35}
 };
 
-d3.csv('data/video_games.csv').then(data => {
+d3.csv('data/test_data.csv').then(data => {
 
     // Process the data
     data.forEach(e => {

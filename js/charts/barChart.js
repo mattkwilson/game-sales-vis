@@ -27,6 +27,8 @@ class StackedBarChart {
  
          vis.yScale = d3.scaleLinear()
              .range([vis.height, 0]);
+
+        
  
  
          // Initialize axes
@@ -50,6 +52,30 @@ class StackedBarChart {
  
          vis.yAxisG = vis.chart.append('g')
              .attr('class', 'axis y-axis');
+
+         // Append both axis titles
+         vis.chart.append('text')
+         .attr('class', 'title')
+         .attr('y', vis.height + 25)
+         .attr('x', vis.width + 10)
+         .attr('dy', '.71em')
+         .style('text-anchor', 'end')
+         .text('Category');
+
+     vis.svg.append('text')
+         .attr('class', 'title')
+         .attr('x', 0)
+         .attr('y', 0)
+         .attr('dy', '.71em')
+         .text('Sales in Millions')
+         .attr("y", 5);
+       
+    vis.svg.append("circle").attr("cx",vis.width - 30 ).attr("cy", vis.height - 100 ).attr("r", 6).style("fill", "#edd1d1")
+    vis.svg.append("circle").attr("cx",vis.width - 30).attr("cy",vis.height - 80).attr("r", 6).style("fill", "#d1e0ed")
+    vis.svg.append("circle").attr("cx",vis.width - 30).attr("cy",vis.height - 60).attr("r", 6).style("fill", "#d1edd5")
+    vis.svg.append("text").attr("x", vis.width - 15).attr("y", vis.height - 100).text("NA").style("font-size", "15px").attr("alignment-baseline","middle")
+    vis.svg.append("text").attr("x", vis.width - 15).attr("y", vis.height - 80).text("Europe").style("font-size", "15px").attr("alignment-baseline","middle")
+    vis.svg.append("text").attr("x", vis.width - 15).attr("y", vis.height - 60).text("Japan").style("font-size", "15px").attr("alignment-baseline","middle")
 
          // Initialize stack generator and specify the categories or layers
         // that we want to show in the chart
@@ -131,9 +157,9 @@ class StackedBarChart {
         const vis = this;
 
         console.log(vis.stackedData);
-        
+    
 
-       var bar = vis.chart.selectAll('.category')
+        vis.chart.selectAll('.category')
         .data(vis.stackedData)
       .join('g')
         .attr('class', d => `category cat-${d.key}`)
@@ -144,6 +170,8 @@ class StackedBarChart {
         .attr('y', d => vis.yScale(d[1]))
         .attr('height', d => vis.yScale(d[0]) - vis.yScale(d[1]))
         .attr('width', vis.xScale.bandwidth());
+
+        
 
 
         vis.xAxisG
