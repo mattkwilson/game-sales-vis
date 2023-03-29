@@ -30,8 +30,10 @@ class BubbleChart {
                         .attr('height', vis.config.height);
         vis.chart = vis.svg.append('g').attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
 
-        // Ref: https://observablehq.com/@d3/color-schemes
-        const colorPallette = ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"];
+        // Ref: - https://observablehq.com/@d3/color-schemes
+        //      - https://www.learnui.design/tools/data-color-picker.html
+        const colorPallette = ["#003f5c","2f4b7c","#665191","#a05195","#d45087","#f95d6a","#ff7c43","#ffa600","#005c02","#327c2f","#14c990","#383838"];
+        
         vis.colorMap = new Map();
         
         // Derive genre data
@@ -42,9 +44,9 @@ class BubbleChart {
             vis.colorMap.set(g[0], colorPallette[vis.colorMap.size]);
         });
         vis.colorMap.set('World', '#faf8f7');
-        vis.colorMap.set('North America', '#f5f3f2');
-        vis.colorMap.set('Europe', '#f5f3f2');
-        vis.colorMap.set('Japan', '#f5f3f2');
+        vis.colorMap.set('North America', '#edd1d1');
+        vis.colorMap.set('Europe', '#d1e0ed');
+        vis.colorMap.set('Japan', '#d1edd5');
 
         const rawData = [
             {
