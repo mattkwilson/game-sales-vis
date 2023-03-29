@@ -133,7 +133,7 @@ class StackedBarChart {
         console.log(vis.stackedData);
         
 
-        vis.chart.selectAll('category')
+       var bar = vis.chart.selectAll('.category')
         .data(vis.stackedData)
       .join('g')
         .attr('class', d => `category cat-${d.key}`)
