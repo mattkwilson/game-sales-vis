@@ -1,11 +1,12 @@
 
 class StackedBarChart {
-    constructor(config_, data_) {
+    constructor(config_, data_,) {
         this.config = {
             svgElement: config_.svgElement,
             width: config_.width,
             height: config_.height,
-            margin: config_.margin
+            margin: config_.margin,
+            selection: config_.selection || "Genre",
         };
         this.data = data_;
         this.initVis();
@@ -67,11 +68,27 @@ class StackedBarChart {
     console.log(vis.data);
 
 
-    // Derive genre data
-    const genreNASales = d3.rollups(vis.data, g => d3.sum(g, d => d.NA_Sales), d => d.Genre);
-    const genreEUSales = d3.rollups(vis.data, g => d3.sum(g, d => d.EU_Sales), d => d.Genre);
-    const genreJPSales = d3.rollups(vis.data, g => d3.sum(g, d => d.JP_Sales), d => d.Genre);
-    const genreWorldSales = d3.rollups(vis.data, g => d3.sum(g, d => d.Global_Sales), d => d.Genre);
+    var totalNASales = d3.rollups(vis.data, g => d3.sum(g, d => d.NA_Sales), d => d.Genre);
+    var  totalEUSales = d3.rollups(vis.data, g => d3.sum(g, d => d.EU_Sales), d => d.Genre);
+    var  totalJPSales = d3.rollups(vis.data, g => d3.sum(g, d => d.JP_Sales), d => d.Genre);
+    var totalWorldSales = d3.rollups(vis.data, g => d3.sum(g, d => d.Global_Sales), d => d.Genre);
+     vis.xValue = d => d.Genre;
+
+ if (vis.config.selection == 'Platforms') {
+     totalNASales = d3.rollups(vis.data, g => d3.sum(g, d => d.NA_Sales), d => d.Platforms);
+     totalEUSales = d3.rollups(vis.data, g => d3.sum(g, d => d.EU_Sales), d => d.Platforms);
+     totalJPSales = d3.rollups(vis.data, g => d3.sum(g, d => d.JP_Sales), d => d.Platforms);
+     totalWorldSales = d3.rollups(vis.data, g => d3.sum(g, d => d.Global_Sales), d => d.Platforms);
+     vis.xValue = d => d.Platforms;
+ }
+
+ if (vis.config.selection == 'Publisher') {
+    totalNASales = d3.rollups(vis.data, g => d3.sum(g, d => d.NA_Sales), d => d.Publisher);
+    totalEUSales = d3.rollups(vis.data, g => d3.sum(g, d => d.EU_Sales), d => d.Publisher);
+    totalJPSales = d3.rollups(vis.data, g => d3.sum(g, d => d.JP_Sales), d => d.Publisher);
+    totalWorldSales = d3.rollups(vis.data, g => d3.sum(g, d => d.Global_Sales), d => d.Publisher);
+    vis.xValue = d => d.Publisher;
+}
 
     function mergeArrays(arr1, arr2, arr3) {
         var arr4 = [];
@@ -82,7 +99,7 @@ class StackedBarChart {
         return arr4;
     }
 
-    const finalSales = mergeArrays(genreEUSales, genreJPSales, genreNASales);
+    const finalSales = mergeArrays(totalEUSales, totalJPSales, totalNASales);
 
 
     const rawData = [
@@ -97,11 +114,10 @@ class StackedBarChart {
 
          // TODO: Add code for updating the visualization
         // Specify accessor functions
-        vis.xValue = d => d.Genre;
         vis.yValue = d => d.Global_Sales;
 
         vis.xScale.domain(vis.data.map(vis.xValue));
-        vis.yScale.domain([0, d3.max(genreWorldSales, d => d[1])]);
+        vis.yScale.domain([0, d3.max(totalWorldSales, d => d[1])]);
 
 
     // Call stack generator on the dataset
@@ -111,9 +127,11 @@ class StackedBarChart {
     }
 
     renderVis() {
+
         const vis = this;
 
         console.log(vis.stackedData);
+        
 
         vis.chart.selectAll('category')
         .data(vis.stackedData)

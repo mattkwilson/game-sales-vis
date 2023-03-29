@@ -30,4 +30,19 @@ d3.csv('data/video_games.csv').then(data => {
 
     const bubbleChart = new BubbleChart(bubbleChartConfig, data);
     const barChart = new StackedBarChart(barChartConfig, data);
-});
+
+    d3.select('#Platforms').on('click', d => {
+    barChart.config.selection = "Platforms";        
+    barChart.updateVis();
+      });
+    d3.select('#Publisher').on('click', d => {
+        barChart.config.selection = "Publisher";        
+        barChart.updateVis();
+          });
+    d3.select('#Genre').on('click', d => {
+            barChart.config.selection = "Genre";        
+            barChart.updateVis();
+              });
+
+    }); 
+
