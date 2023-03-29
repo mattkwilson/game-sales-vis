@@ -150,8 +150,8 @@ class BubbleChart {
                             if(!this.isInteractable(d)) {
                                 return;
                             }
-                            vis.tooltip.style('left', (d.x + vis.config.margin.left + vis.config.tooltipOffset.x) + 'px')
-                                        .style('top', (d.y + vis.config.margin.top + vis.config.tooltipOffset.y) + 'px');
+                            vis.tooltip.style('left', (e.pageX + vis.config.tooltipOffset.x) + 'px')
+                                        .style('top', (e.pageY - vis.config.tooltipOffset.y) + 'px');
                         })
                         .on('mouseleave', (e, d) => {
                             if(!this.isInteractable(d)) {

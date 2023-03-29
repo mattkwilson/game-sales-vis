@@ -5,7 +5,7 @@
     width: 500,
     height: 400,
     margin: { left: 10, right: 10, top: 10, bottom: 10 },
-    tooltipOffset: { x: 20, y: 10 }
+    tooltipOffset: { x: 15, y: 50 }
 };
 
 d3.csv('data/video_games.csv').then(data => {
