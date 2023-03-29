@@ -8,7 +8,14 @@
     tooltipOffset: { x: 15, y: 50 }
 };
 
-d3.csv('data/video_games.csv').then(data => {
+const barChartConfig = {
+    svgElement: '#bar-chart-vis',
+    width: 1000,
+    height: 200,
+    margin: {top: 25, right: 20, bottom: 40, left: 35}
+};
+
+d3.csv('data/test_data.csv').then(data => {
 
     // Process the data
     data.forEach(e => {
@@ -24,6 +31,23 @@ d3.csv('data/video_games.csv').then(data => {
 
     let selectedElements = [];
     const dispatch = d3.dispatch('selection-change', 'reset-selection');
+
+    const barChart = new StackedBarChart(barChartConfig, data);
+
+    d3.select('#Platforms').on('click', d => {
+        barChart.config.selection = "Platforms";        
+        barChart.updateVis();
+    });
+
+    d3.select('#Publisher').on('click', d => {
+        barChart.config.selection = "Publisher";        
+        barChart.updateVis();
+    });
+
+    d3.select('#Genre').on('click', d => {
+        barChart.config.selection = "Genre";        
+        barChart.updateVis();
+    });
 
     const bubbleChart = new BubbleChart(bubbleChartConfig, data, dispatch);
 
@@ -43,3 +67,5 @@ d3.csv('data/video_games.csv').then(data => {
         bubbleChart.updateVis();
     });
 });
+   
+
