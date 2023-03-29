@@ -7,6 +7,13 @@
     margin: { left: 10, right: 10, top: 10, bottom: 10 }
 };
 
+const barChartConfig = {
+    svgElement: '#bar-chart-vis',
+    width: 800,
+    height: 200,
+    margin: {top: 25, right: 20, bottom: 20, left: 35}
+};
+
 d3.csv('data/video_games.csv').then(data => {
 
     // Process the data
@@ -22,4 +29,5 @@ d3.csv('data/video_games.csv').then(data => {
     console.log(data);
 
     const bubbleChart = new BubbleChart(bubbleChartConfig, data);
+    const barChart = new StackedBarChart(barChartConfig, data);
 });
