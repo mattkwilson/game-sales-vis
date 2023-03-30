@@ -1,4 +1,4 @@
-class FocusContextVis {
+class HistogramChart {
     /**
      * source: https://github.com/UBC-InfoVis/447-materials/tree/23Jan/d3-examples/d3-brushing-linking
      */
