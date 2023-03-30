@@ -15,6 +15,13 @@ const barChartConfig = {
     margin: {top: 25, right: 20, bottom: 40, left: 35}
 };
 
+const colorLegendConfig = {
+    svgElement: '#color-legend-vis',
+    width: 500,
+    height: 200,
+    margin: {top: 25, right: 20, bottom: 40, left: 35}
+};
+
  const scatterPlotConfig = {
      svgElement: '#scatter-plot-vis',
      width: 400,
@@ -70,6 +77,7 @@ d3.csv('data/test_data.csv').then(data => {
 
     const barChart = new StackedBarChart(barChartConfig, data, dispatch);
     const bubbleChart = new BubbleChart(bubbleChartConfig, data, dispatch);
+    const colorLegend = new ColorLegend(colorLegendConfig, data, dispatch);
 
     barChart.NASales = computedData.genreNASales;
     barChart.EUSales = computedData.genreEUSales;
@@ -79,6 +87,10 @@ d3.csv('data/test_data.csv').then(data => {
     barChart.updateVis();
 
     updateColorMap(computedData.genreNASales);
+    colorLegend.colorMap = colorMap;
+    colorLegend.sales = computedData.genreWorldSales;
+    colorLegend.updateVis();
+
     bubbleChart.colorMap = colorMap;
     bubbleChart.NASales = computedData.genreNASales;
     bubbleChart.EUSales = computedData.genreEUSales;
@@ -97,6 +109,10 @@ d3.csv('data/test_data.csv').then(data => {
         barChart.updateVis();
 
         updateColorMap(computedData.platformNASales);
+        colorLegend.colorMap = colorMap;
+        colorLegend.sales = computedData.platformWorldSales;
+        colorLegend.updateVis();
+
         bubbleChart.colorMap = colorMap;
         bubbleChart.NASales = computedData.platformNASales;
         bubbleChart.EUSales = computedData.platformEUSales;
@@ -118,6 +134,11 @@ d3.csv('data/test_data.csv').then(data => {
         barChart.updateVis();
 
         updateColorMap(computedData.publisherNASales);
+
+        colorLegend.colorMap = colorMap;
+        colorLegend.sales = computedData.publisherWorldSales;
+        colorLegend.updateVis();
+
         bubbleChart.colorMap = colorMap;
         bubbleChart.NASales = computedData.publisherNASales;
         bubbleChart.EUSales = computedData.publisherEUSales;
@@ -139,6 +160,10 @@ d3.csv('data/test_data.csv').then(data => {
         barChart.updateVis();
 
         updateColorMap(computedData.genreNASales);
+        colorLegend.colorMap = colorMap;
+        colorLegend.sales = computedData.genreWorldSales;
+        colorLegend.updateVis();
+
         bubbleChart.colorMap = colorMap;
         bubbleChart.NASales = computedData.genreNASales;
         bubbleChart.EUSales = computedData.genreEUSales;
