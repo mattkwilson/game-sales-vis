@@ -31,8 +31,6 @@ class ColorLegend {
 
         const sales = vis.sales;
 
-        console.log(sales);
-
         this.renderVis();
     }
 

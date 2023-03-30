@@ -91,8 +91,6 @@ class StackedBarChart {
     updateVis() {
         const vis = this;
 
-    console.log(vis.data);
-
     function mergeArrays(arr1, arr2, arr3) {
         var arr4 = [];
         for ( var i = 0; i < arr1.length; i ++) {
