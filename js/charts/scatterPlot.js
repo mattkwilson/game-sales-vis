@@ -79,8 +79,6 @@ class ScatterPlot {
 
     updateVis() {
         const vis = this;
-
-        // TODO: Add code for updating the visualization
         // Specify accessor functions
         vis.xValue = d => d.Global_Sales;
         vis.yValue = d => d.Rating;
@@ -115,6 +113,7 @@ class ScatterPlot {
               <div class='tooltip-title'>${d.Title}</div>
               <div class='tooltip-title'>${d.Rating} Rating</div>
               <div><strong>$${d.Global_Sales} Million</strong></div>
+              <div>Released in ${d.Year}</div>
             `)
             })
             .on('mouseleave', () => {
@@ -129,6 +128,5 @@ class ScatterPlot {
         vis.yAxisG
             .call(vis.yAxis)
             .call(g => g.select('.domain').remove())
-        // TODO: Add code for rendering the visualization
     }
 }
