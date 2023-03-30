@@ -1,6 +1,6 @@
 
 class ScatterPlot {
-    constructor(config_, data_) {
+    constructor(config_, colorMap_, groupBy_, data_) {
         this.config = {
             svgElement: config_.svgElement,
             width: config_.width,
@@ -8,6 +8,8 @@ class ScatterPlot {
             margin: config_.margin
         };
         this.data = data_;
+        this.colorMap = colorMap_;
+        this.groupby = groupBy_;
         this.initVis();
     }
 
@@ -25,11 +27,6 @@ class ScatterPlot {
         vis.yScale = d3.scaleLinear()
             .range([vis.height, 0])
             .domain([0, 10]);
-
-        vis.colorScale = d3.scaleOrdinal()
-            .domain(["Role-Playing", 'Racing', 'Sports', 'Adventure', 'Shooter', "Platform", "Simulation",
-                "Action", "Strategy", "Misc", "Fighting", "Puzzle" ])
-            .range(d3.schemeSet3);
 
         // Initialize axes
         vis.xAxis = d3.axisBottom(vis.xScale)
@@ -102,7 +99,7 @@ class ScatterPlot {
             .attr('cy', d => vis.yScale(vis.yValue(d)))
             .attr('cx', d => vis.xScale(vis.xValue(d)))
             .attr('class', "point")
-            .attr('fill', d => vis.colorScale(d.Genre))
+            .attr('fill', d => vis.colorMap.get(d[vis.groupby]))
             // Tooltip event listeners
             .on('mouseover', (event, d) => {
                 d3.select('#tooltip')

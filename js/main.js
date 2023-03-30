@@ -103,6 +103,8 @@ d3.csv('data/test_data.csv').then(data => {
         bubbleChart.JPSales = computedData.platformJPSales;
         bubbleChart.updateVis();
 
+        updateScatterPlot();
+
         dispatch.call('reset-selection', e, d);
     });
 
@@ -122,6 +124,8 @@ d3.csv('data/test_data.csv').then(data => {
         bubbleChart.JPSales = computedData.publisherJPSales;
         bubbleChart.updateVis();
 
+        updateScatterPlot();
+
         dispatch.call('reset-selection', e, d);
     });
 
@@ -140,6 +144,8 @@ d3.csv('data/test_data.csv').then(data => {
         bubbleChart.EUSales = computedData.genreEUSales;
         bubbleChart.JPSales = computedData.genreJPSales;
         bubbleChart.updateVis();
+
+        updateScatterPlot();
 
         dispatch.call('reset-selection', e, d);
     });
@@ -166,7 +172,8 @@ d3.csv('data/test_data.csv').then(data => {
         barChart.updateVis();
     });
 
-    const scatterPlot = new ScatterPlot(scatterPlotConfig, data);
+
+    const scatterPlot = new ScatterPlot(scatterPlotConfig, colorMap, groupBy, data);
     const dispatcherYearRange = d3.dispatch('yearRangeChanged');
     const histogram = new FocusContextVis(histogramConfig, dispatcherYearRange, data);
     dispatcherYearRange.on('yearRangeChanged', selection => {
@@ -237,6 +244,12 @@ d3.csv('data/test_data.csv').then(data => {
         result.publisherJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Publisher);
         result.publisherWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Publisher);
         return result;
+    }
+
+    function updateScatterPlot() {
+        scatterPlot.colorMap = colorMap;
+        scatterPlot.groupby = groupBy;
+        scatterPlot.updateVis();
     }
 });
 
