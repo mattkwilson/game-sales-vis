@@ -16,20 +16,18 @@ class ColorLegend {
         // Setup bounds for chart
         vis.width = vis.config.width - vis.config.margin.left - vis.config.margin.right;
         vis.height = vis.config.height - vis.config.margin.top - vis.config.margin.bottom;
-          // Define size of SVG drawing area
-          vis.svg = d3.select(vis.config.svgElement)
-          .attr('width', vis.config.width)
-          .attr('height', vis.config.height);
+        // Define size of SVG drawing area
+        vis.svg = d3.select(vis.config.svgElement)
+            .attr('width', vis.config.width)
+            .attr('height', vis.config.height);
 
-      vis.chart = vis.svg.append('g')
-          .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
+        vis.chart = vis.svg.append('g')
+            .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
 
     }
 
     updateVis() {
         const vis = this;
-
-        const sales = vis.sales;
 
         this.renderVis();
     }
