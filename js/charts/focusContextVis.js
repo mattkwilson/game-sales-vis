@@ -42,7 +42,9 @@ class FocusContextVis {
             .nice();
 
         // Initialize axes
-        vis.xAxisContext = d3.axisBottom(vis.xScaleContext).tickSizeOuter(0);
+        vis.xAxisContext = d3.axisBottom(vis.xScaleContext)
+            .tickSizeOuter(0)
+            .tickFormat(d3.format(".0f"));
         vis.yAxisContext = d3.axisLeft(vis.yScaleContext).tickSizeOuter(0);
 
         // Define size of SVG drawing area
