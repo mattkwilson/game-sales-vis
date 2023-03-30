@@ -4,13 +4,21 @@
     <title>Video Game Sales</title>
     <meta charset="UTF-8">
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
-    <link rel="stylesheet" href="dist/style.css">
+    <link rel="stylesheet" href="dist/tailwind.css">
+    <link rel="stylesheet" href="css/barchart.css">
 </head>
 <body>    
     <!-- Add HTML content, SVG drawing area, ... -->
     <div class="">
         <h1 class="text-center font-bold text-3xl p-5">Video Game Sales</h1>
         <svg id="bubble-chart-vis"></svg>
+            <ul class="bar-legend">
+                <button class="legend-btn" id="Genre"><span class="legend-symbol"></span> Genre</li>
+                <button class="legend-btn" id="Publisher"><span class="legend-symbol"></span> Publisher</li>
+                <button class="legend-btn" id="Platforms"><span class="legend-symbol"></span> Platform </li>
+            </ul>     
+        <svg id="bar-chart-vis"></svg>
+
     </div>
     <!-- D3 bundle -->
     <script src="js/lib/d3.v6.min.js"></script>
