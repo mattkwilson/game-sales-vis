@@ -1,4 +1,4 @@
-#tooltip {
+/* #tooltip {
     position: absolute;
     border-style: solid;
     border-color: black;
@@ -8,9 +8,40 @@
     box-shadow: 2px 2px 5px rgba(126, 126, 126, 0.386);
     padding: 5px;
     background-color:white;
+} */
+
+.point{
+    opacity: 0.5;
 }
 
-.legends{
-    display: inline-flex;
-    align-items: center;
+.point:hover{
+    opacity: 1;
+    stroke: black;
+}
+
+#groupBySelect {
+    border: 1px solid #ddd;
+}
+
+/* Tooltip */
+#tooltip {
+    position: absolute;
+    display: none;
+    background: #fff;
+    box-shadow: 3px 3px 3px 0px rgb(92 92 92);
+    border: 1px solid #ddd;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px;
+    min-width: 100px;
+    color: #333;
+    white-space: nowrap;
+
+}
+.tooltip-title {
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;}
+.chart-area {
+    fill: #a5b3bf;
 }

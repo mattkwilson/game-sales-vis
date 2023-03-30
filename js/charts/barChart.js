@@ -5,7 +5,8 @@ class StackedBarChart {
             svgElement: config_.svgElement,
             width: config_.width,
             height: config_.height,
-            margin: config_.margin
+            margin: config_.margin,
+            tooltipOffset: config_.tooltipOffset
         };
         this.data = data_;
         this.dispatch = dispatch_;
@@ -127,6 +128,7 @@ class StackedBarChart {
 
         const vis = this;
 
+        
         vis.chart.selectAll('.category')
             .data(vis.stackedData)
             .join('g')
@@ -146,6 +148,10 @@ class StackedBarChart {
                     .style('top', (e.pageY) + 'px')
                     .html(`<p><b>Region:</b> ${d.region}</p> <p><b>Sales:</b> ${d3.format('$.0f')(Math.abs(Math.round(d[0] - d[1])))} Million</p>`);
 
+            })
+            .on('mousemove', (e, d) => {
+                vis.tooltip.style('left', (e.pageX + vis.config.tooltipOffset.x) + 'px')
+                            .style('top', (e.pageY - vis.config.tooltipOffset.y) + 'px');
             })
             .on('mouseleave', (e, d) => {
                 vis.tooltip.style('display', 'none');

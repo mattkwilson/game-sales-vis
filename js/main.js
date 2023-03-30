@@ -12,28 +12,30 @@ const barChartConfig = {
     svgElement: '#bar-chart-vis',
     width: 1000,
     height: 200,
-    margin: {top: 25, right: 20, bottom: 40, left: 35}
+    margin: {top: 25, right: 20, bottom: 40, left: 35},
+    tooltipOffset: { x: 15, y: 50 }
 };
 
 const colorLegendConfig = {
     svgElement: '#color-legend-vis',
-    width: 500,
+    width: 250,
     height: 200,
-    margin: {top: 25, right: 20, bottom: 40, left: 35}
+    margin: {top: 25, right: 10, bottom: 40, left: 15}
 };
 
  const scatterPlotConfig = {
      svgElement: '#scatter-plot-vis',
-     width: 400,
-     height: 500,
+     width: 445,
+     height: 300,
      margin: {top: 25, right: 20, bottom: 20, left: 35}
  };
 
  const histogramConfig = {
      svgElement: '#histogram-chart-vis',
      width: 400,
-     height: 725,
-     margin: {top: 25, right: 20, bottom: 20, left: 35}
+     height: 20,
+     margin: {top: 25, right: 20, bottom: 20, left: 35},
+     contextMargin: {top: 25, right: 20, bottom: 20, left: 35}
  };
 
 d3.csv('data/test_data.csv').then(data => {
@@ -54,117 +56,28 @@ d3.csv('data/test_data.csv').then(data => {
     let selectedElements = [];
     let groupBy = 'Genre';
 
-    const dispatch = d3.dispatch('selection-change', 'reset-selection');
+    const dispatch = d3.dispatch('yearRangeChanged', 'selection-change', 'reset-selection');
     let computedData = computeRollUpData(data);
     // Ref: - https://observablehq.com/@d3/color-schemes
     //      - https://www.learnui.design/tools/data-color-picker.html
     const colorPallette = ["#003f5c","2f4b7c","#665191","#a05195","#d45087","#f95d6a","#ff7c43","#ffa600","#005c02","#327c2f","#14c990","#383838"];
     const colorMap = new Map();
 
-
     const barChart = new StackedBarChart(barChartConfig, data, dispatch);
     const bubbleChart = new BubbleChart(bubbleChartConfig, data, dispatch);
     const colorLegend = new ColorLegend(colorLegendConfig, data, dispatch);
+    const scatterPlot = new ScatterPlot(scatterPlotConfig, colorMap, groupBy, data);
+    const histogram = new HistogramChart(histogramConfig, dispatch, data);
 
-    barChart.NASales = computedData.genreNASales;
-    barChart.EUSales = computedData.genreEUSales;
-    barChart.JPSales = computedData.genreJPSales;
-    barChart.WorldSales = computedData.genreWorldSales;
-    barChart.xValue = d => d.Genre;
-    barChart.updateVis();
+    updateData(groupBy);
 
-    updateColorMap(computedData.genreNASales);
-    colorLegend.colorMap = colorMap;
-    colorLegend.sales = computedData.genreWorldSales;
-    colorLegend.updateVis();
-
-    bubbleChart.colorMap = colorMap;
-    bubbleChart.NASales = computedData.genreNASales;
-    bubbleChart.EUSales = computedData.genreEUSales;
-    bubbleChart.JPSales = computedData.genreJPSales;
-    bubbleChart.updateVis();
-
-
-
-    d3.select('#Platforms').on('click', (e, d) => {
-        groupBy = "Platforms";
-        barChart.NASales = computedData.platformNASales;
-        barChart.EUSales = computedData.platformEUSales;
-        barChart.JPSales = computedData.platformJPSales;
-        barChart.WorldSales = computedData.platformWorldSales;
-        barChart.xValue = d => d.Platforms;
-        barChart.updateVis();
-
-        updateColorMap(computedData.platformNASales);
-        colorLegend.colorMap = colorMap;
-        colorLegend.sales = computedData.platformWorldSales;
-        colorLegend.updateVis();
-
-        bubbleChart.colorMap = colorMap;
-        bubbleChart.NASales = computedData.platformNASales;
-        bubbleChart.EUSales = computedData.platformEUSales;
-        bubbleChart.JPSales = computedData.platformJPSales;
-        bubbleChart.updateVis();
-
-        updateScatterPlot();
-
-        dispatch.call('reset-selection', e, d);
-    });
-
-    d3.select('#Publisher').on('click', (e, d) => {
-        groupBy = "Publisher";
-        barChart.NASales = computedData.publisherNASales;
-        barChart.EUSales = computedData.publisherEUSales;
-        barChart.JPSales = computedData.publisherJPSales;
-        barChart.WorldSales = computedData.publisherWorldSales;
-        barChart.xValue = d => d.Publisher;
-        barChart.updateVis();
-
-        updateColorMap(computedData.publisherNASales);
-
-        colorLegend.colorMap = colorMap;
-        colorLegend.sales = computedData.publisherWorldSales;
-        colorLegend.updateVis();
-
-        bubbleChart.colorMap = colorMap;
-        bubbleChart.NASales = computedData.publisherNASales;
-        bubbleChart.EUSales = computedData.publisherEUSales;
-        bubbleChart.JPSales = computedData.publisherJPSales;
-        bubbleChart.updateVis();
-
-        updateScatterPlot();
-
-        dispatch.call('reset-selection', e, d);
-    });
-
-    d3.select('#Genre').on('click', (e, d) => {
-        groupBy = "Genre";
-        barChart.NASales = computedData.genreNASales;
-        barChart.EUSales = computedData.genreEUSales;
-        barChart.JPSales = computedData.genreJPSales;
-        barChart.WorldSales = computedData.genreWorldSales;
-        barChart.xValue = d => d.Genre;
-        barChart.updateVis();
-
-        updateColorMap(computedData.genreNASales);
-        colorLegend.colorMap = colorMap;
-        colorLegend.sales = computedData.genreWorldSales;
-        colorLegend.updateVis();
-
-        bubbleChart.colorMap = colorMap;
-        bubbleChart.NASales = computedData.genreNASales;
-        bubbleChart.EUSales = computedData.genreEUSales;
-        bubbleChart.JPSales = computedData.genreJPSales;
-        bubbleChart.updateVis();
-
-        updateScatterPlot();
-
-        dispatch.call('reset-selection', e, d);
+    d3.select('#groupBySelect').on('change', e => {
+        updateData(document.getElementById('groupBySelect').value);
+        dispatch.call('reset-selection', e, null);
     });
 
     dispatch.on('selection-change', element => {
         const id = element.id + element.parent.id;
-        console.log(id);
         if(selectedElements.includes(id)) {
             selectedElements.splice(selectedElements.indexOf(id), 1);
         } else {
@@ -184,51 +97,39 @@ d3.csv('data/test_data.csv').then(data => {
         barChart.updateVis();
     });
 
-
-    const scatterPlot = new ScatterPlot(scatterPlotConfig, colorMap, groupBy, data);
-    const dispatcherYearRange = d3.dispatch('yearRangeChanged');
-    const histogram = new HistogramChart(histogramConfig, dispatcherYearRange, data);
-    dispatcherYearRange.on('yearRangeChanged', selection => {
+    dispatch.on('yearRangeChanged', selection => {
         let filteredData = data.filter(d => d.Year >= selection.start && d.Year <= selection.end);
         scatterPlot.data = filteredData
-        scatterPlot.updateVis();
         computedData = computeRollUpData(filteredData);
-        if (groupBy == "Genre"){
-            bubbleChart.NASales = computedData.genreNASales;
-            bubbleChart.EUSales = computedData.genreEUSales;
-            bubbleChart.JPSales = computedData.genreJPSales;
-
-            barChart.NASales = computedData.genreNASales;
-            barChart.EUSales = computedData.genreEUSales;
-            barChart.JPSales = computedData.genreJPSales;
-            barChart.WorldSales = computedData.genreWorldSales;
-
-        }else if (groupBy == "Publisher"){
-            bubbleChart.NASales = computedData.publisherNASales;
-            bubbleChart.EUSales = computedData.publisherEUSales;
-            bubbleChart.JPSales = computedData.publisherJPSales;
-
-            barChart.NASales = computedData.publisherNASales;
-            barChart.EUSales = computedData.publisherEUSales;
-            barChart.JPSales = computedData.publisherJPSales;
-            barChart.WorldSales = computedData.publisherWorldSales;
-        }else{
-            bubbleChart.NASales = computedData.platformNASales;
-            bubbleChart.EUSales = computedData.platformEUSales;
-            bubbleChart.JPSales = computedData.platformJPSales;
-
-            barChart.NASales = computedData.platformNASales;
-            barChart.EUSales = computedData.platformEUSales;
-            barChart.JPSales = computedData.platformJPSales;
-            barChart.WorldSales = computedData.platformWorldSales;
-
-        }
-        bubbleChart.updateVis();
-        barChart.updateVis();
+        updateData(groupBy);
     });
 
 
     // Helpers
+
+    function updateData(value) {
+        groupBy = value;
+        const key = value.toLowerCase();
+        barChart.NASales = computedData[key + 'NASales'];
+        barChart.EUSales = computedData[key + 'EUSales'];
+        barChart.JPSales = computedData[key + 'JPSales'];
+        barChart.WorldSales = computedData[key + 'WorldSales'];
+        barChart.xValue = d => d[value];
+        barChart.updateVis();
+
+        updateColorMap(computedData[key + 'NASales']);
+        colorLegend.colorMap = colorMap;
+        colorLegend.sales = computedData[key + 'WorldSales'];
+        colorLegend.updateVis();
+
+        bubbleChart.colorMap = colorMap;
+        bubbleChart.NASales = computedData[key + 'NASales'];
+        bubbleChart.EUSales = computedData[key + 'EUSales'];
+        bubbleChart.JPSales = computedData[key + 'JPSales'];
+        bubbleChart.updateVis();
+
+        updateScatterPlot();
+    }
 
     function updateColorMap(salesData) {
         colorMap.clear();
@@ -247,10 +148,10 @@ d3.csv('data/test_data.csv').then(data => {
         result.genreEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Genre);
         result.genreJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Genre);
         result.genreWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Genre);
-        result.platformNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Platforms);
-        result.platformEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Platforms);
-        result.platformJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Platforms);
-        result.platformWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Platforms);
+        result.platformsNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Platforms);
+        result.platformsEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Platforms);
+        result.platformsJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Platforms);
+        result.platformsWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Platforms);
         result.publisherNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Publisher);
         result.publisherEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Publisher);
         result.publisherJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Publisher);
@@ -264,4 +165,3 @@ d3.csv('data/test_data.csv').then(data => {
         scatterPlot.updateVis();
     }
 });
-

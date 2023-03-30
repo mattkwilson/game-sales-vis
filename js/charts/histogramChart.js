@@ -11,11 +11,11 @@ class HistogramChart {
     constructor(_config, _dispatcher, _data) {
         this.config = {
             parentElement: _config.svgElement,
-            width:  400,
-            height: 400,
-            contextHeight: 400,
-            margin: {top: 10, right: 10, bottom: 100, left: 45},
-            contextMargin: {top: 280, right: 10, bottom: 20, left: 45}
+            width:  _config.width,
+            height: _config.height,
+            contextHeight: _config.height,
+            margin: _config.margin,
+            contextMargin: _config.contextMargin
         }
         let groupByYear = d3.rollup(_data, v => v.length, d => d.Year);
         this.data = Array.from(groupByYear, function([key, value]) {
@@ -120,7 +120,7 @@ class HistogramChart {
 
         // Update the axes
         vis.xAxisContextG.call(vis.xAxisContext);
-        vis.yAxisContextG.call(vis.yAxisContext);
+        // vis.yAxisContextG.call(vis.yAxisContext);
 
         // Update the brush and define a default position
         const defaultBrushSelection = [vis.xScaleContext(2015), vis.xScaleContext.range()[1]];
