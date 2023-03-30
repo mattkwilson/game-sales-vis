@@ -121,16 +121,16 @@ class FocusContextVis {
             .extent([[0, 0], [vis.config.width, vis.config.contextHeight]])
             .on('brush', function({selection}) {
                 if (selection) vis.brushed(selection);
+                // let start = vis.xScaleContext.invert(selection[0])
+                // let end = vis.xScaleContext.invert(selection[1])
+                // vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
+
             })
             .on('end', function({selection}) {
-                //todo call dispatcher here
-                // vis.xScaleContext.invert(selection[0])
                 if (!selection) vis.brushed(null);
-                let start = vis.xScaleContext.invert(selection[0])
-                let end = vis.xScaleContext.invert(selection[1])
-                vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
-
-
+                // let start = vis.xScaleContext.invert(selection[0])
+                // let end = vis.xScaleContext.invert(selection[1])
+                // vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
             });
         vis.updateVis();
     }
@@ -230,11 +230,16 @@ class FocusContextVis {
         // Check if the brush is still active or if it has been removed
         if (selection) {
             // Convert given pixel coordinates (range: [x0,x1]) into a time period (domain: [Date, Date])
-            const selectedDomain = selection.map(vis.xScaleContext.invert, vis.xScaleContext);
+            // const selectedDomain = selection.map(vis.xScaleContext.invert, vis.xScaleContext);
 
             // Update x-scale of the focus view accordingly
             // vis.xScaleFocus.domain(selectedDomain);
+
+            let start = vis.xScaleContext.invert(selection[0])
+            let end = vis.xScaleContext.invert(selection[1])
+            vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
         } else {
+            vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
             // Reset x-scale of the focus view (full time period)
             // vis.xScaleFocus.domain(vis.xScaleContext.domain());
         }
