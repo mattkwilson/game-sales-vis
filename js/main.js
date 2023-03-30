@@ -15,6 +15,13 @@ const barChartConfig = {
     margin: {top: 25, right: 20, bottom: 40, left: 35}
 };
 
+const colorLegendConfig = {
+    svgElement: '#color-legend-vis',
+    width: 500,
+    height: 200,
+    margin: {top: 25, right: 20, bottom: 40, left: 35}
+};
+
 d3.csv('data/test_data.csv').then(data => {
 
     // Process the data
@@ -55,6 +62,7 @@ d3.csv('data/test_data.csv').then(data => {
     
     const barChart = new StackedBarChart(barChartConfig, data, dispatch);
     const bubbleChart = new BubbleChart(bubbleChartConfig, data, dispatch);
+    const colorLegend = new ColorLegend(colorLegendConfig, data, dispatch);
 
     barChart.NASales = genreNASales;
     barChart.EUSales = genreEUSales;
@@ -64,6 +72,10 @@ d3.csv('data/test_data.csv').then(data => {
     barChart.updateVis();
 
     updateColorMap(genreNASales);
+    colorLegend.colorMap = colorMap;
+    colorLegend.sales = genreWorldSales;
+    colorLegend.updateVis();
+
     bubbleChart.colorMap = colorMap;
     bubbleChart.NASales = genreNASales;
     bubbleChart.EUSales = genreEUSales;
@@ -82,6 +94,10 @@ d3.csv('data/test_data.csv').then(data => {
         barChart.updateVis();
 
         updateColorMap(platformNASales);
+        colorLegend.colorMap = colorMap;
+        colorLegend.sales = platformWorldSales;
+        colorLegend.updateVis();
+
         bubbleChart.colorMap = colorMap;
         bubbleChart.NASales = platformNASales;
         bubbleChart.EUSales = platformEUSales;
@@ -101,6 +117,10 @@ d3.csv('data/test_data.csv').then(data => {
         barChart.updateVis();
 
         updateColorMap(publisherNASales);
+        colorLegend.colorMap = colorMap;
+        colorLegend.sales = publisherWorldSales;
+        colorLegend.updateVis();
+
         bubbleChart.colorMap = colorMap;
         bubbleChart.NASales = publisherNASales;
         bubbleChart.EUSales = publisherEUSales;
@@ -120,6 +140,10 @@ d3.csv('data/test_data.csv').then(data => {
         barChart.updateVis();
 
         updateColorMap(genreNASales);
+        colorLegend.colorMap = colorMap;
+        colorLegend.sales = genreWorldSales;
+        colorLegend.updateVis();
+
         bubbleChart.colorMap = colorMap;
         bubbleChart.NASales = genreNASales;
         bubbleChart.EUSales = genreEUSales;
