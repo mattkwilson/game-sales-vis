@@ -51,23 +51,6 @@ class FocusContextVis {
             .attr('height', containerHeight);
 
 
-        // vis.tooltipTrackingArea = vis.focus.append('rect')
-        //     .attr('width', vis.config.width)
-        //     .attr('height', vis.config.height)
-        //     .attr('fill', 'none')
-        //     .attr('pointer-events', 'all');
-        //
-        // // Empty tooltip group (hidden by default)
-        // vis.tooltip = vis.focus.append('g')
-        //     .attr('class', 'tooltip')
-        //     .style('display', 'none');
-        //
-        // vis.tooltip.append('circle')
-        //     .attr('r', 4);
-        //
-        // vis.tooltip.append('text');
-
-
         // Append context group with x- and y-axes
         vis.context = vis.svg.append('g')
             .attr('transform', `translate(${vis.config.contextMargin.left},0)`)//${vis.config.contextMargin.top})`)
@@ -132,33 +115,6 @@ class FocusContextVis {
         vis.contextAreaPath
             .datum(vis.data)
             .attr('d', vis.area);
-
-        // vis.tooltipTrackingArea
-        //     .on('mouseenter', () => {
-        //         vis.tooltip.style('display', 'block');
-        //     })
-        //     .on('mouseleave', () => {
-        //         vis.tooltip.style('display', 'none');
-        //     })
-        //     .on('mousemove', function(event) {
-        //         // Get date that corresponds to current mouse x-coordinate
-        //         const xPos = d3.pointer(event, this)[0]; // First array element is x, second is y
-        //         const date = vis.xScaleFocus.invert(xPos);
-        //
-        //         // Find nearest data point
-        //         const index = vis.bisectDate(vis.data, date, 1);
-        //         const a = vis.data[index - 1];
-        //         const b = vis.data[index];
-        //         const d = b && (date - a.date > b.date - date) ? b : a;
-        //
-        //         // Update tooltip
-        //         vis.tooltip.select('circle')
-        //             .attr('transform', `translate(${vis.xScaleFocus(d.date)},${vis.yScaleFocus(d.close)})`);
-        //
-        //         vis.tooltip.select('text')
-        //             .attr('transform', `translate(${vis.xScaleFocus(d.date)},${(vis.yScaleFocus(d.close) - 15)})`)
-        //             .text(Math.round(d.close));
-        //     });
 
         // Update the axes
         vis.xAxisContextG.call(vis.xAxisContext);
