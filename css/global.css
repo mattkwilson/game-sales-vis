@@ -9,3 +9,8 @@
     padding: 5px;
     background-color:white;
 }
+
+.legends{
+    display: inline-flex;
+    align-items: center;
+}

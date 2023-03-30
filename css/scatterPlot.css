@@ -1,0 +1,9 @@
+.point {
+    opacity: 70%;
+}
+
+.point:hover {
+    opacity: 100%;
+    stroke: black;
+    cursor: pointer;
+}

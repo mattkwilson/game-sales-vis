@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.point{
+    opacity: 0.5;
+}
+
+.point:hover{
+    opacity: 1;
+    stroke: black;
+}
+
+/* Tooltip */
+#tooltip {
+    position: absolute;
+    display: none;
+    background: #fff;
+    box-shadow: 3px 3px 3px 0px rgb(92 92 92);
+    border: 1px solid #ddd;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px;
+    min-width: 100px;
+    color: #333;
+    white-space: nowrap;
+
+}
+.tooltip-title {
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;}
+.chart-area {
+    fill: #a5b3bf;
+}
