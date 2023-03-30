@@ -12,7 +12,8 @@ const barChartConfig = {
     svgElement: '#bar-chart-vis',
     width: 1000,
     height: 200,
-    margin: {top: 25, right: 20, bottom: 40, left: 35}
+    margin: {top: 25, right: 20, bottom: 40, left: 35},
+    tooltipOffset: { x: 15, y: 50 }
 };
 
 const colorLegendConfig = {
