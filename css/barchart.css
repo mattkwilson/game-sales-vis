@@ -1,16 +1,16 @@
 .cat-NorthAmerica rect {
-    fill: #edd1d1;
-  }
-  .cat-Europe rect {
-    fill: #d1e0ed;
-  }
-  .cat-Japan rect {
-    fill: #d1edd5;
-  }
-
-.bar {
-    
+  fill: #edd1d1;
 }
+
+.cat-Europe rect {
+  fill: #d1e0ed;
+}
+
+.cat-Japan rect {
+  fill: #d1edd5;
+}
+
+.bar {}
 
 .bar:hover {
   cursor: pointer;
