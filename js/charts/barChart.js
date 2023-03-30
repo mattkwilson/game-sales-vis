@@ -83,6 +83,7 @@ class StackedBarChart {
         .keys(['NorthAmerica', 'Europe', 'Japan']);
 
         vis.selection = [];
+        vis.tooltip = d3.select('#tooltip');
  
     }
 
@@ -147,7 +148,17 @@ class StackedBarChart {
         .attr('y', d => vis.yScale(d[1]))
         .attr('height', d => vis.yScale(d[0]) - vis.yScale(d[1]))
         .attr('width', vis.xScale.bandwidth())
-        .on('click', (e, d) => vis.dispatch.call('selection-change', e, { id: d.data.id, parent: {id: d.region}}));
+        .on('click', (e, d) => vis.dispatch.call('selection-change', e, { id: d.data.id, parent: {id: d.region}}))
+        .on('mouseenter', (e, d) => {
+            vis.tooltip.style('display', 'block')
+                .style('left', (e.pageX) + 'px')
+                .style('top', (e.pageY) + 'px')
+                .html(`<p><b>Region:</b> ${d.region}</p> <p><b>Sales:</b> ${d3.format('$.0f')(Math.abs(Math.round(d[0] - d[1])))} Million</p>`);
+
+        })
+        .on('mouseleave', (e, d) => {
+            vis.tooltip.style('display', 'none');
+        });
 
         vis.xAxisG
             .call(vis.xAxis)
