@@ -30,42 +30,138 @@ d3.csv('data/test_data.csv').then(data => {
     console.log(data);
 
     let selectedElements = [];
+    let groupBy = 'Genre';
+
     const dispatch = d3.dispatch('selection-change', 'reset-selection');
 
-    const barChart = new StackedBarChart(barChartConfig, data);
+    const genreNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Genre);
+    const genreEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Genre);
+    const genreJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Genre);
+    const genreWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Genre);
+    const platformNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Platforms);
+    const platformEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Platforms);
+    const platformJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Platforms);
+    const platformWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Platforms);
+    const publisherNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Publisher);
+    const publisherEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Publisher);
+    const publisherJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Publisher);
+    const publisherWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Publisher);
 
-    d3.select('#Platforms').on('click', d => {
-        barChart.config.selection = "Platforms";        
-        barChart.updateVis();
-    });
+    // Ref: - https://observablehq.com/@d3/color-schemes
+    //      - https://www.learnui.design/tools/data-color-picker.html
+    const colorPallette = ["#003f5c","2f4b7c","#665191","#a05195","#d45087","#f95d6a","#ff7c43","#ffa600","#005c02","#327c2f","#14c990","#383838"];
+    const colorMap = new Map();
 
-    d3.select('#Publisher').on('click', d => {
-        barChart.config.selection = "Publisher";        
-        barChart.updateVis();
-    });
-
-    d3.select('#Genre').on('click', d => {
-        barChart.config.selection = "Genre";        
-        barChart.updateVis();
-    });
-
+    
+    const barChart = new StackedBarChart(barChartConfig, data, dispatch);
     const bubbleChart = new BubbleChart(bubbleChartConfig, data, dispatch);
 
+    barChart.NASales = genreNASales;
+    barChart.EUSales = genreEUSales;
+    barChart.JPSales = genreJPSales;
+    barChart.WorldSales = genreWorldSales;
+    barChart.xValue = d => d.Genre;     
+    barChart.updateVis();
+
+    updateColorMap(genreNASales);
+    bubbleChart.colorMap = colorMap;
+    bubbleChart.NASales = genreNASales;
+    bubbleChart.EUSales = genreEUSales;
+    bubbleChart.JPSales = genreJPSales;
+    bubbleChart.updateVis();
+
+
+
+    d3.select('#Platforms').on('click', (e, d) => {
+        groupBy = "Platforms";   
+        barChart.NASales = platformNASales;
+        barChart.EUSales = platformEUSales;
+        barChart.JPSales = platformJPSales;
+        barChart.WorldSales = platformWorldSales;
+        barChart.xValue = d => d.Platforms;
+        barChart.updateVis();
+
+        updateColorMap(platformNASales);
+        bubbleChart.colorMap = colorMap;
+        bubbleChart.NASales = platformNASales;
+        bubbleChart.EUSales = platformEUSales;
+        bubbleChart.JPSales = platformJPSales;
+        bubbleChart.updateVis();
+
+        dispatch.call('reset-selection', e, d);
+    });
+
+    d3.select('#Publisher').on('click', (e, d) => {
+        groupBy = "Publisher";     
+        barChart.NASales = publisherNASales;
+        barChart.EUSales = publisherEUSales;
+        barChart.JPSales = publisherJPSales;
+        barChart.WorldSales = publisherWorldSales;
+        barChart.xValue = d => d.Publisher;   
+        barChart.updateVis();
+
+        updateColorMap(publisherNASales);
+        bubbleChart.colorMap = colorMap;
+        bubbleChart.NASales = publisherNASales;
+        bubbleChart.EUSales = publisherEUSales;
+        bubbleChart.JPSales = publisherJPSales;
+        bubbleChart.updateVis();
+
+        dispatch.call('reset-selection', e, d);
+    });
+
+    d3.select('#Genre').on('click', (e, d) => {
+        groupBy = "Genre";   
+        barChart.NASales = genreNASales;
+        barChart.EUSales = genreEUSales;
+        barChart.JPSales = genreJPSales;
+        barChart.WorldSales = genreWorldSales;
+        barChart.xValue = d => d.Genre;     
+        barChart.updateVis();
+
+        updateColorMap(genreNASales);
+        bubbleChart.colorMap = colorMap;
+        bubbleChart.NASales = genreNASales;
+        bubbleChart.EUSales = genreEUSales;
+        bubbleChart.JPSales = genreJPSales;
+        bubbleChart.updateVis();
+
+        dispatch.call('reset-selection', e, d);
+    });
+
     dispatch.on('selection-change', element => {
-        if(selectedElements.includes(element)) {
-            selectedElements.splice(selectedElements.indexOf(element), 1);
+        const id = element.id + element.parent.id;
+        console.log(id);
+        if(selectedElements.includes(id)) {
+            selectedElements.splice(selectedElements.indexOf(id), 1);
         } else {
-            selectedElements.push(element);
+            selectedElements.push(id);
         }
         bubbleChart.selection = selectedElements;
         bubbleChart.updateVis();
+        barChart.selection = selectedElements;
+        barChart.updateVis();
     });
 
     dispatch.on('reset-selection', d => {
         selectedElements = [];
         bubbleChart.selection = selectedElements;
         bubbleChart.updateVis();
+        barChart.selection = selectedElements;
+        barChart.updateVis();
     });
+
+    // Helpers
+
+    function updateColorMap(salesData) {
+        colorMap.clear();
+        salesData.forEach(g => {
+            colorMap.set(g[0], colorPallette[colorMap.size]);
+        });
+        colorMap.set('World', '#faf8f7');
+        colorMap.set('NorthAmerica', '#edd1d1');
+        colorMap.set('Europe', '#d1e0ed');
+        colorMap.set('Japan', '#d1edd5');
+    }
 });
    
-

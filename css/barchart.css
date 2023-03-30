@@ -7,3 +7,20 @@
   .cat-Japan rect {
     fill: #d1edd5;
   }
+
+.bar {
+    
+}
+
+.bar:hover {
+  cursor: pointer;
+  stroke: black;
+}
+
+.bar-selected {
+  stroke: black;
+}
+
+.bar-selected:hover {
+  cursor: pointer;
+}

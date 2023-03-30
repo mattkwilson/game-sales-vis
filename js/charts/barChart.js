@@ -1,14 +1,14 @@
 
 class StackedBarChart {
-    constructor(config_, data_,) {
+    constructor(config_, data_, dispatch_) {
         this.config = {
             svgElement: config_.svgElement,
             width: config_.width,
             height: config_.height,
-            margin: config_.margin,
-            selection: config_.selection || "Genre",
+            margin: config_.margin
         };
         this.data = data_;
+        this.dispatch = dispatch_;
         this.initVis();
     }
 
@@ -81,40 +81,15 @@ class StackedBarChart {
         // that we want to show in the chart
         vis.stack = d3.stack()
         .keys(['NorthAmerica', 'Europe', 'Japan']);
- 
- 
-         vis.updateVis();
 
-        this.updateVis();
+        vis.selection = [];
+ 
     }
 
     updateVis() {
         const vis = this;
 
     console.log(vis.data);
-
-
-    var totalNASales = d3.rollups(vis.data, g => d3.sum(g, d => d.NA_Sales), d => d.Genre);
-    var  totalEUSales = d3.rollups(vis.data, g => d3.sum(g, d => d.EU_Sales), d => d.Genre);
-    var  totalJPSales = d3.rollups(vis.data, g => d3.sum(g, d => d.JP_Sales), d => d.Genre);
-    var totalWorldSales = d3.rollups(vis.data, g => d3.sum(g, d => d.Global_Sales), d => d.Genre);
-     vis.xValue = d => d.Genre;
-
- if (vis.config.selection == 'Platforms') {
-     totalNASales = d3.rollups(vis.data, g => d3.sum(g, d => d.NA_Sales), d => d.Platforms);
-     totalEUSales = d3.rollups(vis.data, g => d3.sum(g, d => d.EU_Sales), d => d.Platforms);
-     totalJPSales = d3.rollups(vis.data, g => d3.sum(g, d => d.JP_Sales), d => d.Platforms);
-     totalWorldSales = d3.rollups(vis.data, g => d3.sum(g, d => d.Global_Sales), d => d.Platforms);
-     vis.xValue = d => d.Platforms;
- }
-
- if (vis.config.selection == 'Publisher') {
-    totalNASales = d3.rollups(vis.data, g => d3.sum(g, d => d.NA_Sales), d => d.Publisher);
-    totalEUSales = d3.rollups(vis.data, g => d3.sum(g, d => d.EU_Sales), d => d.Publisher);
-    totalJPSales = d3.rollups(vis.data, g => d3.sum(g, d => d.JP_Sales), d => d.Publisher);
-    totalWorldSales = d3.rollups(vis.data, g => d3.sum(g, d => d.Global_Sales), d => d.Publisher);
-    vis.xValue = d => d.Publisher;
-}
 
     function mergeArrays(arr1, arr2, arr3) {
         var arr4 = [];
@@ -125,12 +100,12 @@ class StackedBarChart {
         return arr4;
     }
 
-    const finalSales = mergeArrays(totalEUSales, totalJPSales, totalNASales);
+    const finalSales = mergeArrays(vis.EUSales, vis.JPSales, vis.NASales);
 
 
     const rawData = [
         ...finalSales.map(d => { return {
-                Genre: d[0],
+                id: d[0],
                 NorthAmerica: d[3],
                 Europe: d[1],
                 Japan: d[2]
@@ -143,22 +118,23 @@ class StackedBarChart {
         vis.yValue = d => d.Global_Sales;
 
         vis.xScale.domain(vis.data.map(vis.xValue));
-        vis.yScale.domain([0, d3.max(totalWorldSales, d => d[1])]);
+        vis.yScale.domain([0, d3.max(vis.WorldSales, d => d[1])]);
 
 
     // Call stack generator on the dataset
     vis.stackedData = vis.stack(rawData);
-
+    vis.stackedData.forEach(element => {
+        element.forEach(arr => {
+            arr.region = element.key;
+        });
+    });
         this.renderVis();
     }
 
     renderVis() {
 
         const vis = this;
-
-        console.log(vis.stackedData);
     
-
         vis.chart.selectAll('.category')
         .data(vis.stackedData)
       .join('g')
@@ -166,13 +142,12 @@ class StackedBarChart {
       .selectAll('rect')
         .data(d => d)
       .join('rect')
-        .attr('x', d => vis.xScale(d.data.Genre))
+        .attr('class', d => vis.selection.includes(d.data.id + d.region) ? 'bar-selected' : 'bar')
+        .attr('x', d => vis.xScale(d.data.id))
         .attr('y', d => vis.yScale(d[1]))
         .attr('height', d => vis.yScale(d[0]) - vis.yScale(d[1]))
-        .attr('width', vis.xScale.bandwidth());
-
-        
-
+        .attr('width', vis.xScale.bandwidth())
+        .on('click', (e, d) => vis.dispatch.call('selection-change', e, { id: d.data.id, parent: {id: d.region}}));
 
         vis.xAxisG
             .call(vis.xAxis)
