@@ -4,6 +4,10 @@
     <title>Video Game Sales</title>
     <meta charset="UTF-8">
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
+    <link rel="stylesheet" href="dist/tailwind.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/bubbleChart.css">
+    <link rel="stylesheet" href="css/barchart.css">
     <link rel="stylesheet" href="dist/style.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -14,10 +18,18 @@
         <svg id="bubble-chart-vis"></svg>
         <svg id="scatter-plot-vis"></svg>
         <svg id="histogram-chart-vis"></svg>
-        <div id="tooltip"></div>
+        <ul class="bar-legend">
+            <button class="legend-btn" id="Genre"><span class="legend-symbol"></span> Genre</button>
+            <button class="legend-btn" id="Publisher"><span class="legend-symbol"></span> Publisher</button>
+            <button class="legend-btn" id="Platforms"><span class="legend-symbol"></span> Platform </button>
+        </ul>
+        <svg id="bar-chart-vis"></svg>
     </div>
+    <div id="tooltip"></div>
+
     <!-- D3 bundle -->
     <script src="js/lib/d3.v6.min.js"></script>
+    <script src="js/lib/d3-hierarchy.min.js"></script>
 
     <!-- Our JS code -->
     <script src="js/main.js"></script>

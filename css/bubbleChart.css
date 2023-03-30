@@ -1,0 +1,32 @@
+.bubble {
+    opacity: 70%;
+}
+
+.bubble-selected {
+    opacity: 100%;
+    stroke: black;
+}
+
+.bubble-selected:hover {
+    cursor: pointer;
+}
+
+.bubble-world {
+    stroke: rgb(202, 202, 202);
+    stroke-width: 1;
+}
+
+.bubble-region {
+    stroke: rgb(202, 202, 202);
+    stroke-width: 1;
+}
+
+.bubble:hover {
+    opacity: 100%;
+    stroke: black;
+    cursor: pointer;
+}
+
+.bubble-label {
+    font-size: xx-small;
+}
