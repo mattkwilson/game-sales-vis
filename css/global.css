@@ -10,11 +10,6 @@
     background-color:white;
 } */
 
-.legends{
-    display: inline-flex;
-    align-items: center;
-}
-
 .point{
     opacity: 0.5;
 }
@@ -22,6 +17,10 @@
 .point:hover{
     opacity: 1;
     stroke: black;
+}
+
+#groupBySelect {
+    border: 1px solid #ddd;
 }
 
 /* Tooltip */

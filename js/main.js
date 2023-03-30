@@ -18,23 +18,24 @@ const barChartConfig = {
 
 const colorLegendConfig = {
     svgElement: '#color-legend-vis',
-    width: 500,
+    width: 250,
     height: 200,
-    margin: {top: 25, right: 20, bottom: 40, left: 35}
+    margin: {top: 25, right: 10, bottom: 40, left: 15}
 };
 
  const scatterPlotConfig = {
      svgElement: '#scatter-plot-vis',
-     width: 400,
-     height: 500,
+     width: 445,
+     height: 300,
      margin: {top: 25, right: 20, bottom: 20, left: 35}
  };
 
  const histogramConfig = {
      svgElement: '#histogram-chart-vis',
      width: 400,
-     height: 725,
-     margin: {top: 25, right: 20, bottom: 20, left: 35}
+     height: 20,
+     margin: {top: 25, right: 20, bottom: 20, left: 35},
+     contextMargin: {top: 25, right: 20, bottom: 20, left: 35}
  };
 
 d3.csv('data/test_data.csv').then(data => {
@@ -77,7 +78,6 @@ d3.csv('data/test_data.csv').then(data => {
 
     dispatch.on('selection-change', element => {
         const id = element.id + element.parent.id;
-        console.log(id);
         if(selectedElements.includes(id)) {
             selectedElements.splice(selectedElements.indexOf(id), 1);
         } else {
