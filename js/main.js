@@ -55,19 +55,6 @@ d3.csv('data/test_data.csv').then(data => {
     let groupBy = 'Genre';
 
     const dispatch = d3.dispatch('selection-change', 'reset-selection');
-
-    // const genreNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Genre);
-    // const genreEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Genre);
-    // const genreJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Genre);
-    // const genreWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Genre);
-    // const platformNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Platforms);
-    // const platformEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Platforms);
-    // const platformJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Platforms);
-    // const platformWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Platforms);
-    // const publisherNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Publisher);
-    // const publisherEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Publisher);
-    // const publisherJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Publisher);
-    // const publisherWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Publisher);
     let computedData = computeRollUpData(data);
     // Ref: - https://observablehq.com/@d3/color-schemes
     //      - https://www.learnui.design/tools/data-color-picker.html
@@ -200,7 +187,7 @@ d3.csv('data/test_data.csv').then(data => {
 
     const scatterPlot = new ScatterPlot(scatterPlotConfig, colorMap, groupBy, data);
     const dispatcherYearRange = d3.dispatch('yearRangeChanged');
-    const histogram = new FocusContextVis(histogramConfig, dispatcherYearRange, data);
+    const histogram = new HistogramChart(histogramConfig, dispatcherYearRange, data);
     dispatcherYearRange.on('yearRangeChanged', selection => {
         let filteredData = data.filter(d => d.Year >= selection.start && d.Year <= selection.end);
         scatterPlot.data = filteredData
