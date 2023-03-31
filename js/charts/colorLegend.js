@@ -34,44 +34,22 @@ class ColorLegend {
 
     renderVis() {
         const vis = this;
-
-        // https://jsfiddle.net/k_sav/oa703n4j/ resource for legend
+        // create our color legend text
        vis.chart.selectAll('text')
         .data(vis.sales)
         .join("text")
         .attr("fill", d => vis.colorMap.get(d[0]))
         .attr("x", function(d, i){ 
-        // if (vis.sales.length <= 12) { if (i >= vis.sales.length/2) {
-        //     return 5;
-        // } else {
-        //     return 200}}
-        // else if (i > 6) {
-        //     return 5;
-        // } else {
-        //     return 200
-        // }
         return 10;
         })
         .attr("y", function(d, i) { 
-            // if(vis.sales.length <= 12) { 
-            //     if (i >= vis.sales.length/2) { 
-            //         return -5 + (15*i)}
-            //     else {
-            //         return  -5 + 15*(i + vis.sales.length/2)
-            //     }
-            // } else if (i > 6) {
-            //     return -5 + (15*i)
-
-            // }
-            // else {
-            //     return -5 + 15*(i + 6)
-            // }
             return -5 + (15*i);
         })
         .text(function (d) {
             return d[0]
         });
 
+        // add circles
         vis.chart.selectAll('circle')
         .data(vis.sales)
         .join("circle")
