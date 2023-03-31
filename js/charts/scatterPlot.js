@@ -5,11 +5,13 @@ class ScatterPlot {
             svgElement: config_.svgElement,
             width: config_.width,
             height: config_.height,
-            margin: config_.margin
+            margin: config_.margin,
+            tooltipOffset: config_.tooltipOffset
         };
         this.data = data_;
         this.colorMap = colorMap_;
         this.groupby = groupBy_;
+        this.tooltip = d3.select('#tooltip');
         this.initVis();
     }
 
@@ -101,8 +103,8 @@ class ScatterPlot {
             .attr('class', "point")
             .attr('fill', d => vis.colorMap.get(d[vis.groupby]))
             // Tooltip event listeners
-            .on('mouseover', (event, d) => {
-                d3.select('#tooltip')
+            .on('mouseenter', (event, d) => {
+                vis.tooltip
                     .style('display', 'block')
                     .style('left', (event.pageX) + 'px')
                     .style('top', (event.pageY) + 'px')
@@ -113,8 +115,13 @@ class ScatterPlot {
               <div>Released in ${d.Year}</div>
             `)
             })
+            .on('mousemove', (e, d) => {
+                vis.tooltip
+                    .style('left', (e.pageX + vis.config.tooltipOffset.x) + 'px')
+                    .style('top', (e.pageY - vis.config.tooltipOffset.y) + 'px');
+            })
             .on('mouseleave', () => {
-                d3.select('#tooltip').style('display', 'none');
+                vis.tooltip.style('display', 'none');
             });
         circles.exit().remove();
 
