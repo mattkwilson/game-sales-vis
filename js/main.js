@@ -149,10 +149,6 @@ d3.csv('data/test_data.csv').then(data => {
         result.genreEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Genre);
         result.genreJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Genre);
         result.genreWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Genre);
-        result.platformsNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Platforms);
-        result.platformsEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Platforms);
-        result.platformsJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Platforms);
-        result.platformsWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Platforms);
         result.publisherNASales = d3.rollups(data, g => d3.sum(g, d => d.NA_Sales), d => d.Publisher);
         result.publisherEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Publisher);
         result.publisherJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Publisher);
