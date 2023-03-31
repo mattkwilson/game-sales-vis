@@ -75,12 +75,16 @@ class HistogramChart {
         // Initialize brush component
         vis.brush = d3.brushX()
             .extent([[0, 0], [vis.config.width, vis.config.contextHeight]])
-            .on('brush', function({selection}) {
-                if (selection) vis.brushed(selection);
-
-            })
             .on('end', function({selection}) {
-                if (!selection) vis.brushed(null);
+                if (selection) {
+                    // Convert given pixel coordinates (range: [x0,x1]) into year
+                    let start = vis.xScaleContext.invert(selection[0])
+                    let end = vis.xScaleContext.invert(selection[1])
+                    vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
+                } else {
+                    // no range selected, show all data (full time period)
+                    vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
+                }
             });
         vis.updateVis();
     }
@@ -120,31 +124,11 @@ class HistogramChart {
 
         // Update the axes
         vis.xAxisContextG.call(vis.xAxisContext);
-        // vis.yAxisContextG.call(vis.yAxisContext);
 
         // Update the brush and define a default position
         const defaultBrushSelection = [vis.xScaleContext(2015), vis.xScaleContext.range()[1]];
         vis.brushG
             .call(vis.brush)
             .call(vis.brush.move, defaultBrushSelection);
-    }
-
-    /**
-     * React to brush events
-     */
-    brushed(selection) {
-        let vis = this;
-
-        // Check if the brush is still active or if it has been removed
-        if (selection) {
-            // Convert given pixel coordinates (range: [x0,x1]) into year
-
-            let start = vis.xScaleContext.invert(selection[0])
-            let end = vis.xScaleContext.invert(selection[1])
-            vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
-        } else {
-            // no range selected, show all data (full time period)
-            vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
-        }
     }
 }

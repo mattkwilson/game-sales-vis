@@ -27,7 +27,8 @@ const colorLegendConfig = {
      svgElement: '#scatter-plot-vis',
      width: 445,
      height: 300,
-     margin: {top: 25, right: 20, bottom: 20, left: 35}
+     margin: {top: 25, right: 20, bottom: 20, left: 35},
+     tooltipOffset: { x: 15, y: 50 }
  };
 
  const histogramConfig = {
