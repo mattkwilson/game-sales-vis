@@ -45,3 +45,9 @@
 .chart-area {
     fill: #a5b3bf;
 }
+
+.title {
+    font-weight: 600;
+    font-size: large;
+    color:#000
+}

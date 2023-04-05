@@ -3,15 +3,15 @@
  const bubbleChartConfig = {
     svgElementId: 'bubble-chart-vis',
     width: 500,
-    height: 400,
+    height: 500,
     margin: { left: 10, right: 10, top: 10, bottom: 10 },
     tooltipOffset: { x: 15, y: 50 }
 };
 
 const barChartConfig = {
     svgElement: '#bar-chart-vis',
-    width: 1000,
-    height: 200,
+    width: 800,
+    height: 350,
     margin: {top: 25, right: 20, bottom: 40, left: 35},
     tooltipOffset: { x: 15, y: 50 }
 };
@@ -25,16 +25,16 @@ const colorLegendConfig = {
 
  const scatterPlotConfig = {
      svgElement: '#scatter-plot-vis',
-     width: 445,
-     height: 300,
+     width: 800,
+     height: 700,
      margin: {top: 25, right: 20, bottom: 20, left: 35},
      tooltipOffset: { x: 15, y: 50 }
  };
 
  const histogramConfig = {
      svgElement: '#histogram-chart-vis',
-     width: 400,
-     height: 20,
+     width: 760,
+     height: 40,
      margin: {top: 25, right: 20, bottom: 20, left: 35},
      contextMargin: {top: 25, right: 20, bottom: 20, left: 35}
  };

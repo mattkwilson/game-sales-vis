@@ -24,11 +24,12 @@ class ScatterPlot {
 
         // Initialize scales
         vis.xScale = d3.scaleLinear()
-            .range([0, vis.width]);
+            .range([0, vis.width])
+            .domain([0, 10]);
 
         vis.yScale = d3.scaleLinear()
-            .range([vis.height, 0])
-            .domain([0, 10]);
+            .range([vis.height, 0]);
+            
 
         // Initialize axes
         vis.xAxis = d3.axisBottom(vis.xScale)
@@ -63,14 +64,14 @@ class ScatterPlot {
             .attr('x', vis.width + 10)
             .attr('dy', '.71em')
             .style('text-anchor', 'end')
-            .text('Sales in Millions');
+            .text('Rating');
 
         vis.svg.append('text')
             .attr('class', 'title')
             .attr('x', 0)
             .attr('y', 0)
             .attr('dy', '.71em')
-            .text('Rating')
+            .text('Sales in Millions')
             .attr("y", 5);
 
         vis.updateVis();
@@ -79,10 +80,10 @@ class ScatterPlot {
     updateVis() {
         const vis = this;
         // Specify accessor functions
-        vis.xValue = d => d.Global_Sales;
-        vis.yValue = d => d.Rating;
+        vis.xValue = d => d.Rating;
+        vis.yValue = d => d.Global_Sales;
 
-        vis.xScale.domain([0, d3.max(vis.data, vis.xValue)]);
+        vis.yScale.domain([0, d3.max(vis.data, vis.yValue)]);
 
         this.renderVis();
     }
@@ -95,7 +96,7 @@ class ScatterPlot {
 
         let circlesEnter = circles.enter()
             .append('circle')
-            .attr('r', 5);
+            .attr('r', 10);
 
         circlesEnter.merge(circles)
             .attr('cy', d => vis.yScale(vis.yValue(d)))

@@ -13,24 +13,27 @@
 </head>
 <body>    
     <!-- Add HTML content, SVG drawing area, ... -->
-    <h1 class="text-center font-bold text-3xl p-5">Video Game Sales</h1>
-    <div class="flex flex-col items-center">
-        <div class="flex flex-row">
+    <div class="flex flex-row">
+        <div class="flex flex-col items-center justify-center basis-1/2">
             <svg id="bubble-chart-vis"></svg>
-            <div class="flex flex-col">
+            <svg id="bar-chart-vis"></svg>
+        </div>
+        <div class="flex flex-row basis-1/2">
+            <div class="flex flex-col items-center justify-center">
+                <h1 class="text-center font-bold text-3xl p-5">Video Game Sales</h1>
                 <svg id="scatter-plot-vis"></svg>
+                <br>
                 <svg id="histogram-chart-vis"></svg>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col mt-[100px] mr-5">
                 <select id="groupBySelect">
                     <option value="Genre">Genre</option>
                     <option value="Publisher">Publisher</option>
                 </select>
-                <svg id="color-legend-vis"></svg>
+                <div class="border-black border-2">
+                    <svg id="color-legend-vis"></svg>
+                </div>
             </div>
-        </div>
-        <div class="flex flex-col items-center">
-            <svg id="bar-chart-vis"></svg>
         </div>
     </div>
 
