@@ -8,7 +8,7 @@ class HistogramChart {
      * @param {Object}
      * @param {Array}
      */
-    constructor(_config, _dispatcher, _data) {
+    constructor(_config, _dispatcher, _defaultYearSelection, _data) {
         this.config = {
             parentElement: _config.svgElement,
             width:  _config.width,
@@ -20,6 +20,7 @@ class HistogramChart {
             return {Year: key, Count:value};
         }).filter(d => d.Year).sort((a, b) => a.Year > b.Year ? 1 : -1);
         this.dispatcher = _dispatcher;
+        this.defaultYearSelection = _defaultYearSelection;
         this.initVis();
     }
 
@@ -124,7 +125,8 @@ class HistogramChart {
         vis.xAxisContextG.call(vis.xAxisContext);
 
         // Update the brush and define a default position
-        const defaultBrushSelection = [vis.xScaleContext(2015), vis.xScaleContext.range()[1]];
+        const defaultBrushSelection = [vis.xScaleContext(vis.defaultYearSelection.start),
+            vis.xScaleContext(vis.defaultYearSelection.end)];
         vis.brushG
             .call(vis.brush)
             .call(vis.brush.move, defaultBrushSelection);
