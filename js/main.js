@@ -39,7 +39,7 @@ const colorLegendConfig = {
      contextMargin: {top: 25, right: 20, bottom: 20, left: 35}
  };
 
-d3.csv('data/test_data.csv').then(data => {
+d3.csv('data/video_games.csv').then(data => {
 
     // Process the data
     data.forEach(e => {
