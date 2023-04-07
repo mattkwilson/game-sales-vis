@@ -2,8 +2,8 @@
  // EXAMPLE
  const bubbleChartConfig = {
     svgElementId: 'bubble-chart-vis',
-    width: 500,
-    height: 500,
+    width: 400,
+    height: 400,
     margin: { left: 10, right: 10, top: 10, bottom: 10 },
     tooltipOffset: { x: 15, y: 50 }
 };
@@ -11,23 +11,23 @@
 const barChartConfig = {
     svgElement: '#bar-chart-vis',
     width: 800,
-    height: 350,
-    margin: {top: 25, right: 20, bottom: 40, left: 35},
+    height: 300,
+    margin: {top: 30, right: 20, bottom: 50, left: 35},
     tooltipOffset: { x: 15, y: 50 }
 };
 
 const colorLegendConfig = {
     svgElement: '#color-legend-vis',
-    width: 250,
-    height: 200,
+    width: 150,
+    height: 240,
     margin: {top: 25, right: 10, bottom: 40, left: 15}
 };
 
  const scatterPlotConfig = {
      svgElement: '#scatter-plot-vis',
-     width: 800,
-     height: 700,
-     margin: {top: 25, right: 20, bottom: 20, left: 35},
+     width: 700,
+     height: 600,
+     margin: {top: 40, right: 20, bottom: 60, left: 35},
      tooltipOffset: { x: 15, y: 50 }
  };
 
@@ -35,8 +35,8 @@ const colorLegendConfig = {
      svgElement: '#histogram-chart-vis',
      width: 760,
      height: 40,
-     margin: {top: 25, right: 20, bottom: 20, left: 35},
-     contextMargin: {top: 25, right: 20, bottom: 20, left: 35}
+     margin: {top: 25, right: 20, bottom: 0, left: 35},
+     contextMargin: {top: 25, right: 20, bottom: 0, left: 35}
  };
 
 d3.csv('data/test_data.csv').then(data => {
@@ -69,6 +69,18 @@ d3.csv('data/test_data.csv').then(data => {
     const colorLegend = new ColorLegend(colorLegendConfig, data, dispatch);
     const scatterPlot = new ScatterPlot(scatterPlotConfig, colorMap, groupBy, data);
     const histogram = new HistogramChart(histogramConfig, dispatch, data);
+
+    // Region Color Legend
+    d3.select('#region-legend').attr('width', colorLegendConfig.width).attr('height', '80px');
+    d3.select('#region-legend').append("circle").attr("cx", 15).attr("cy", 20).attr("r", 6).style("fill", "#edd1d1")
+    d3.select('#region-legend').append("circle").attr("cx", 15).attr("cy", 40).attr("r", 6).style("fill", "#d1e0ed")
+    d3.select('#region-legend').append("circle").attr("cx", 15).attr("cy", 60).attr("r", 6).style("fill", "#d1edd5")
+    // d3.select('#region-legend').append("text").attr("x", 10).attr("y", 18).text("Region").style("font-size", "16px").style("font-weight", "700").attr("alignment-baseline", "middle")
+    d3.select('#region-legend').append("text").attr("x", 26).attr("y", 20).text("North America").style("font-size", "15px").attr("alignment-baseline", "middle")
+    d3.select('#region-legend').append("text").attr("x", 26).attr("y", 40).text("Europe").style("font-size", "15px").attr("alignment-baseline", "middle")
+    d3.select('#region-legend').append("text").attr("x", 26).attr("y", 60).text("Japan").style("font-size", "15px").attr("alignment-baseline", "middle")
+
+    // -----
 
     updateData(groupBy);
 
@@ -127,6 +139,7 @@ d3.csv('data/test_data.csv').then(data => {
         bubbleChart.NASales = computedData[key + 'NASales'];
         bubbleChart.EUSales = computedData[key + 'EUSales'];
         bubbleChart.JPSales = computedData[key + 'JPSales'];
+        bubbleChart.groupBy = value;
         bubbleChart.updateVis();
 
         updateScatterPlot();

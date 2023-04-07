@@ -35,7 +35,6 @@ class StackedBarChart {
 
         vis.yAxis = d3.axisLeft(vis.yScale)
             .ticks(10);
-
         // Define size of SVG drawing area
         vis.svg = d3.select(vis.config.svgElement)
             .attr('width', vis.config.width)
@@ -54,7 +53,7 @@ class StackedBarChart {
         // Append both axis titles
         vis.chart.append('text')
             .attr('class', 'title')
-            .attr('y', vis.height + 25)
+            .attr('y', vis.height + 30)
             .attr('x', vis.width + 10)
             .attr('dy', '.71em')
             .style('text-anchor', 'end')
@@ -63,17 +62,9 @@ class StackedBarChart {
         vis.svg.append('text')
             .attr('class', 'title')
             .attr('x', 0)
-            .attr('y', 0)
+            .attr('y', 10)
             .attr('dy', '.71em')
-            .text('Sales in Millions')
-            .attr("y", 5);
-
-        vis.svg.append("circle").attr("cx", vis.width - 30).attr("cy", vis.height - 100).attr("r", 6).style("fill", "#edd1d1")
-        vis.svg.append("circle").attr("cx", vis.width - 30).attr("cy", vis.height - 80).attr("r", 6).style("fill", "#d1e0ed")
-        vis.svg.append("circle").attr("cx", vis.width - 30).attr("cy", vis.height - 60).attr("r", 6).style("fill", "#d1edd5")
-        vis.svg.append("text").attr("x", vis.width - 15).attr("y", vis.height - 100).text("NA").style("font-size", "15px").attr("alignment-baseline", "middle")
-        vis.svg.append("text").attr("x", vis.width - 15).attr("y", vis.height - 80).text("Europe").style("font-size", "15px").attr("alignment-baseline", "middle")
-        vis.svg.append("text").attr("x", vis.width - 15).attr("y", vis.height - 60).text("Japan").style("font-size", "15px").attr("alignment-baseline", "middle")
+            .text('Sales in Millions');
 
         // Initialize stack generator 
         vis.stack = d3.stack()
@@ -128,7 +119,6 @@ class StackedBarChart {
 
         const vis = this;
 
-        
         vis.chart.selectAll('.category')
             .data(vis.stackedData)
             .join('g')
@@ -146,7 +136,7 @@ class StackedBarChart {
                 vis.tooltip.style('display', 'block')
                     .style('left', (e.pageX) + 'px')
                     .style('top', (e.pageY) + 'px')
-                    .html(`<p><b>Region:</b> ${d.region}</p> <p><b>Sales:</b> ${d3.format('$.0f')(Math.abs(Math.round(d[0] - d[1])))} Million</p>`);
+                    .html(`<p><b>Region:</b> ${d.region}</p> <p><b>Sales:</b> ${d3.format('$.2f')(Math.abs(d[0] - d[1]))} Million</p>`);
 
             })
             .on('mousemove', (e, d) => {

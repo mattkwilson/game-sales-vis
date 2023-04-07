@@ -43,7 +43,7 @@ class ColorLegend {
         return 10;
         })
         .attr("y", function(d, i) { 
-            return -5 + (15*i);
+            return -5 + (18*i);
         })
         .text(function (d) {
             return d[0]
@@ -55,7 +55,7 @@ class ColorLegend {
         .join("circle")
         .attr('r', 5)
         .attr('cx', 0)
-        .attr('cy', (d, i) => -10 + (15*i))
+        .attr('cy', (d, i) => -10 + (18*i))
         .attr('fill', d => vis.colorMap.get(d[0]));
     }
 }

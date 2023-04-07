@@ -30,17 +30,16 @@ class ScatterPlot {
         vis.yScale = d3.scaleLinear()
             .range([vis.height, 0]);
             
-
         // Initialize axes
         vis.xAxis = d3.axisBottom(vis.xScale)
             .ticks(10)
-            .tickSize(-vis.height - 10)
-            .tickPadding(10);
+            .tickSize(vis.height)
+            .tickPadding(15);
 
         vis.yAxis = d3.axisLeft(vis.yScale)
             .ticks(10)
-            .tickSize(-vis.width - 10)
-            .tickPadding(10)
+            .tickSize(vis.width)
+            .tickPadding(15)
 
         // Define size of SVG drawing area
         vis.svg = d3.select(vis.config.svgElement)
@@ -52,15 +51,16 @@ class ScatterPlot {
 
         vis.xAxisG = vis.chart.append('g')
             .attr('class', 'axis x-axis')
-            .attr('transform', `translate(0,${vis.height})`);
+            .attr('transform', `translate(${0}, ${0})`);
 
         vis.yAxisG = vis.chart.append('g')
-            .attr('class', 'axis y-axis');
+            .attr('class', 'axis y-axis')
+            .attr('transform', `translate(${vis.width}, ${0})`);
 
         // Append both axis titles
         vis.chart.append('text')
             .attr('class', 'title')
-            .attr('y', vis.height - 15)
+            .attr('y', vis.height + 35)
             .attr('x', vis.width + 10)
             .attr('dy', '.71em')
             .style('text-anchor', 'end')
@@ -83,7 +83,7 @@ class ScatterPlot {
         vis.xValue = d => d.Rating;
         vis.yValue = d => d.Global_Sales;
 
-        vis.yScale.domain([0, d3.max(vis.data, vis.yValue)]);
+        vis.yScale.domain([0, Math.ceil(d3.max(vis.data, vis.yValue) / 10.0) * 10]);
 
         this.renderVis();
     }
@@ -110,10 +110,10 @@ class ScatterPlot {
                     .style('left', (event.pageX) + 'px')
                     .style('top', (event.pageY) + 'px')
                     .html(`
-              <div class='tooltip-title'>${d.Title}</div>
-              <div class='tooltip-title'>${d.Rating} Rating</div>
-              <div><strong>$${d.Global_Sales} Million</strong></div>
-              <div>Released in ${d.Year}</div>
+              <p><strong>${d.Title}</strong></p>
+              <p><strong>Rating:</strong> ${d.Rating}</p>
+              <p><strong>Sales:</strong> $${d.Global_Sales} Million</p>
+                <p>${!isNaN(d.Year) ? '<p>Released in ' + d.Year : ''}</p>
             `)
             })
             .on('mousemove', (e, d) => {
@@ -132,6 +132,6 @@ class ScatterPlot {
 
         vis.yAxisG
             .call(vis.yAxis)
-            .call(g => g.select('.domain').remove())
+            .call(g => g.select('.domain').remove());
     }
 }

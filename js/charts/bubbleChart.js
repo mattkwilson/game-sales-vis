@@ -32,6 +32,8 @@ class BubbleChart {
 
         vis.selection = [];
 
+        vis.groupBy = '';
+
         vis.tooltip = d3.select('#tooltip');
     }
 
@@ -125,7 +127,7 @@ class BubbleChart {
                                 return;
                             }
                             vis.tooltip.style('display', 'block')
-                                .html(`<p><b>Genre:</b> ${d.id}</p> <p><b>Sales:</b> ${d3.format('$.0f')(Math.round(d.data.sales))} Million</p>`);
+                                .html(`<p><b>${vis.groupBy}:</b> ${d.id}</p> <p><b>Sales:</b> ${d3.format('$.2f')(d.data.sales)} Million</p>`);
 
                         })
                         .on('mousemove', (e, d) => {
