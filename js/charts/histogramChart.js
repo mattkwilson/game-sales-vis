@@ -144,7 +144,9 @@ class HistogramChart {
             let start = vis.xScaleContext.invert(selection[0]);
             let end = vis.xScaleContext.invert(selection[1]);
             if (end - start < 1){
-                let brushSelection = [vis.xScaleContext(Math.round(start)), vis.xScaleContext(Math.round(start) + 1)];
+                start = Math.round(start);
+                end = Math.round(start) + 1;
+                let brushSelection = [vis.xScaleContext(start), vis.xScaleContext(end)];
                 vis.brushG
                     .call(vis.brush)
                     .call(vis.brush.move, brushSelection);
