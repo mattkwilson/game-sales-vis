@@ -24,22 +24,22 @@ class ScatterPlot {
 
         // Initialize scales
         vis.xScale = d3.scaleLinear()
-            .range([0, vis.width]);
-
-        vis.yScale = d3.scaleLinear()
-            .range([vis.height, 0])
+            .range([0, vis.width])
             .domain([0, 10]);
 
+        vis.yScale = d3.scaleLinear()
+            .range([vis.height, 0]);
+            
         // Initialize axes
         vis.xAxis = d3.axisBottom(vis.xScale)
             .ticks(10)
-            .tickSize(-vis.height - 10)
-            .tickPadding(10);
+            .tickSize(vis.height)
+            .tickPadding(15);
 
         vis.yAxis = d3.axisLeft(vis.yScale)
             .ticks(10)
-            .tickSize(-vis.width - 10)
-            .tickPadding(10)
+            .tickSize(vis.width)
+            .tickPadding(15)
 
         // Define size of SVG drawing area
         vis.svg = d3.select(vis.config.svgElement)
@@ -51,26 +51,27 @@ class ScatterPlot {
 
         vis.xAxisG = vis.chart.append('g')
             .attr('class', 'axis x-axis')
-            .attr('transform', `translate(0,${vis.height})`);
+            .attr('transform', `translate(${0}, ${0})`);
 
         vis.yAxisG = vis.chart.append('g')
-            .attr('class', 'axis y-axis');
+            .attr('class', 'axis y-axis')
+            .attr('transform', `translate(${vis.width}, ${0})`);
 
         // Append both axis titles
         vis.chart.append('text')
             .attr('class', 'title')
-            .attr('y', vis.height - 15)
+            .attr('y', vis.height + 35)
             .attr('x', vis.width + 10)
             .attr('dy', '.71em')
             .style('text-anchor', 'end')
-            .text('Sales in Millions');
+            .text('Rating');
 
         vis.svg.append('text')
             .attr('class', 'title')
             .attr('x', 0)
             .attr('y', 0)
             .attr('dy', '.71em')
-            .text('Rating')
+            .text('Sales in Millions')
             .attr("y", 5);
 
         vis.updateVis();
@@ -79,10 +80,10 @@ class ScatterPlot {
     updateVis() {
         const vis = this;
         // Specify accessor functions
-        vis.xValue = d => d.Global_Sales;
-        vis.yValue = d => d.Rating;
+        vis.xValue = d => d.Rating;
+        vis.yValue = d => d.Global_Sales;
 
-        vis.xScale.domain([0, d3.max(vis.data, vis.xValue)]);
+        vis.yScale.domain([0, Math.ceil(d3.max(vis.data, vis.yValue) / 10.0) * 10]);
 
         this.renderVis();
     }
@@ -95,7 +96,7 @@ class ScatterPlot {
 
         let circlesEnter = circles.enter()
             .append('circle')
-            .attr('r', 5);
+            .attr('r', 10);
 
         circlesEnter.merge(circles)
             .attr('cy', d => vis.yScale(vis.yValue(d)))
@@ -109,16 +110,16 @@ class ScatterPlot {
                     .style('left', (event.pageX) + 'px')
                     .style('top', (event.pageY) + 'px')
                     .html(`
-              <div class='tooltip-title'>${d.Title}</div>
-              <div class='tooltip-title'>${d.Rating} Rating</div>
-              <div><strong>$${d.Global_Sales} Million</strong></div>
-              <div>Released in ${d.Year}</div>
+              <p><strong>${d.Title}</strong></p>
+              <p><strong>Rating:</strong> ${d.Rating}</p>
+              <p><strong>Sales:</strong> $${d.Global_Sales} Million</p>
+                <p>${!isNaN(d.Year) ? '<p>Released in ' + d.Year : ''}</p>
             `)
             })
             .on('mousemove', (e, d) => {
                 vis.tooltip
-                    .style('left', (e.pageX + vis.config.tooltipOffset.x) + 'px')
-                    .style('top', (e.pageY - vis.config.tooltipOffset.y) + 'px');
+                    .style('left', (e.pageX - vis.config.tooltipOffset.x - vis.tooltip.node().getBoundingClientRect().width) + 'px')
+                    .style('top', (e.pageY + vis.config.tooltipOffset.y) + 'px');
             })
             .on('mouseleave', () => {
                 vis.tooltip.style('display', 'none');
@@ -131,6 +132,6 @@ class ScatterPlot {
 
         vis.yAxisG
             .call(vis.yAxis)
-            .call(g => g.select('.domain').remove())
+            .call(g => g.select('.domain').remove());
     }
 }

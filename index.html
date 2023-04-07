@@ -13,24 +13,46 @@
 </head>
 <body>    
     <!-- Add HTML content, SVG drawing area, ... -->
-    <h1 class="text-center font-bold text-3xl p-5">Video Game Sales</h1>
-    <div class="flex flex-col items-center">
-        <div class="flex flex-row">
-            <svg id="bubble-chart-vis"></svg>
-            <div class="flex flex-col">
-                <svg id="scatter-plot-vis"></svg>
-                <svg id="histogram-chart-vis"></svg>
+    <h1 class="text-center font-bold text-5xl p-5">Video Game Sales</h1>
+    <div class="flex flex-row m-5">
+        <div class="flex flex-col items-center justify-center basis-1/2">
+            <div class="flex flex-row items-center justify-left mb-2 w-[calc(100%-20px)] border-gray-400 border-solid border-2 p-5 rounded-2xl">
+                <div class="flex flex-col w-full basis-2/12 items-left h-full ">
+                    <h1 class="text-left font-bold text-4xl p-5">Regional Sales</h1>
+                    <p class="text-left text-md p-5 ">Click on a bubble to highlight the corresponding bar in the bar chart below:</p>
+                </div>
+                <div class="flex flex-col w-full basis-8/12 items-center">
+                    <svg id="bubble-chart-vis"></svg>
+                </div>
+                <div class="flex flex-col h-full basis-2/12 align-top">
+                    <div class="flex self-top">
+                        <select id="groupBySelect" class="w-full border-gray-400 border-t-2 border-x-2 font-bold">
+                            <option value="Genre">Genre</option>
+                            <option value="Publisher">Publisher</option>
+                        </select>
+                    </div>
+                    <div class="flex border-gray-400 border-x-2 border-y-2">
+                        <svg id="color-legend-vis"></svg>
+                    </div>
+                    <div class="flex border-gray-400 border-x-2 border-b-2">
+                        <b class="ml-1">Region</b>
+                    </div>
+                    <div class="flex border-gray-400 border-x-2 border-b-2">
+                        <svg id="region-legend"></svg>
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-col">
-                <select id="groupBySelect">
-                    <option value="Genre">Genre</option>
-                    <option value="Publisher">Publisher</option>
-                </select>
-                <svg id="color-legend-vis"></svg>
+            <div class="flex flex-col items-center w-[calc(100%-20px)] border-gray-400 border-solid border-2 p-5 rounded-2xl">
+                <svg id="bar-chart-vis"></svg>
             </div>
         </div>
-        <div class="flex flex-col items-center">
-            <svg id="bar-chart-vis"></svg>
+        <div class="flex flex-col basis-1/2 items-center">
+            <div class="flex flex-col items-center mb-2 w-[calc(100%-20px)] border-gray-400 border-solid border-2 p-5 rounded-2xl">
+                <svg id="scatter-plot-vis"></svg>
+            </div>
+            <div class="flex flex-col items-center w-[calc(100%-20px)] border-gray-400 border-solid border-2 p-5 rounded-2xl">
+                <svg id="histogram-chart-vis"></svg>
+            </div>
         </div>
     </div>
 
