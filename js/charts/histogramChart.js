@@ -75,12 +75,8 @@ class HistogramChart {
         // Initialize brush component
         vis.brush = d3.brushX()
             .extent([[0, 0], [vis.config.width, vis.config.contextHeight]])
-            .on('brush', function({selection}) {
-                if (selection) vis.brushed(selection);
-
-            })
             .on('end', function({selection}) {
-                if (!selection) vis.brushed(null);
+                vis.brushed(selection);
             });
         vis.updateVis();
     }
@@ -134,13 +130,18 @@ class HistogramChart {
      */
     brushed(selection) {
         let vis = this;
-
         // Check if the brush is still active or if it has been removed
         if (selection) {
             // Convert given pixel coordinates (range: [x0,x1]) into year
 
-            let start = vis.xScaleContext.invert(selection[0])
-            let end = vis.xScaleContext.invert(selection[1])
+            let start = vis.xScaleContext.invert(selection[0]);
+            let end = vis.xScaleContext.invert(selection[1]);
+            if (end - start < 1){
+                let brushSelection = [vis.xScaleContext(Math.round(start)), vis.xScaleContext(Math.round(start) + 1)];
+                vis.brushG
+                    .call(vis.brush)
+                    .call(vis.brush.move, brushSelection);
+            }
             vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
         } else {
             // no range selected, show all data (full time period)
