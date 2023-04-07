@@ -27,7 +27,8 @@ const colorLegendConfig = {
      width: 700,
      height: 600,
      margin: {top: 40, right: 20, bottom: 60, left: 35},
-     tooltipOffset: { x: 15, y: 20 }
+     tooltipOffset: { x: 15, y: 20 },
+     defaultMaxDomain: 40
  };
 
  const histogramConfig = {
