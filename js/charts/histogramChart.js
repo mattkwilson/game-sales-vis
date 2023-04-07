@@ -13,9 +13,7 @@ class HistogramChart {
             parentElement: _config.svgElement,
             width:  _config.width,
             height: _config.height,
-            contextHeight: _config.height,
-            margin: _config.margin,
-            contextMargin: _config.contextMargin
+            margin: _config.margin
         }
         let groupByYear = d3.rollup(_data, v => v.length, d => d.Year);
         this.data = Array.from(groupByYear, function([key, value]) {
@@ -31,14 +29,14 @@ class HistogramChart {
     initVis() {
         let vis = this;
 
-        const containerWidth = vis.config.width + vis.config.margin.left + vis.config.margin.right;
-        const containerHeight = vis.config.height + vis.config.margin.top + vis.config.margin.bottom;
+        vis.width = vis.config.width - vis.config.margin.left - vis.config.margin.right;
+        vis.height = vis.config.height - vis.config.margin.top - vis.config.margin.bottom;
 
         vis.xScaleContext = d3.scaleLinear()
-            .range([0, vis.config.width]);
+            .range([0, vis.width]);
 
         vis.yScaleContext = d3.scaleLinear()
-            .range([vis.config.contextHeight, 0])
+            .range([vis.height, 0])
             .nice();
 
         // Initialize axes
@@ -49,13 +47,13 @@ class HistogramChart {
 
         // Define size of SVG drawing area
         vis.svg = d3.select(vis.config.parentElement)
-            .attr('width', containerWidth)
-            .attr('height', containerHeight);
+            .attr('width', vis.config.width)
+            .attr('height', vis.config.height);
 
 
         // Append context group with x- and y-axes
         vis.context = vis.svg.append('g')
-            .attr('transform', `translate(${vis.config.contextMargin.left},0)`)//${vis.config.contextMargin.top})`)
+            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
 
 
         vis.contextAreaPath = vis.context.append('path')
@@ -63,7 +61,7 @@ class HistogramChart {
 
         vis.xAxisContextG = vis.context.append('g')
             .attr('class', 'axis x-axis')
-            .attr('transform', `translate(0,${vis.config.contextHeight})`);
+            .attr('transform', `translate(0,${vis.height})`);
 
         vis.yAxisContextG = vis.context.append('g')
             .attr('class', 'axis y-axis');
@@ -74,7 +72,7 @@ class HistogramChart {
 
         // Initialize brush component
         vis.brush = d3.brushX()
-            .extent([[0, 0], [vis.config.width, vis.config.contextHeight]])
+            .extent([[0, 0], [vis.width, vis.height]])
             .on('end', function({selection}) {
                 if (selection) {
                     // Convert given pixel coordinates (range: [x0,x1]) into year
@@ -86,6 +84,14 @@ class HistogramChart {
                     vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
                 }
             });
+
+        vis.svg.append('text')
+            .attr('class', 'title')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('dy', '.71em')
+            .text('Time Range Filter:');
+
         vis.updateVis();
     }
 
@@ -102,7 +108,7 @@ class HistogramChart {
         vis.area = d3.area()
             .x(d => vis.xScaleContext(vis.xValue(d)))
             .y1(d => vis.yScaleContext(vis.yValue(d)))
-            .y0(vis.config.contextHeight);
+            .y0(vis.height);
 
         // Set the scale input domains
         vis.xScaleContext.domain(d3.extent(vis.data, vis.xValue));

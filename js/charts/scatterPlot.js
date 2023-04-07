@@ -118,8 +118,8 @@ class ScatterPlot {
             })
             .on('mousemove', (e, d) => {
                 vis.tooltip
-                    .style('left', (e.pageX + vis.config.tooltipOffset.x) + 'px')
-                    .style('top', (e.pageY - vis.config.tooltipOffset.y) + 'px');
+                    .style('left', (e.pageX - vis.config.tooltipOffset.x - vis.tooltip.node().getBoundingClientRect().width) + 'px')
+                    .style('top', (e.pageY + vis.config.tooltipOffset.y) + 'px');
             })
             .on('mouseleave', () => {
                 vis.tooltip.style('display', 'none');

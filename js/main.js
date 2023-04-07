@@ -12,14 +12,14 @@ const barChartConfig = {
     svgElement: '#bar-chart-vis',
     width: 800,
     height: 300,
-    margin: {top: 30, right: 20, bottom: 50, left: 35},
+    margin: {top: 30, right: 20, bottom: 50, left: 40},
     tooltipOffset: { x: 15, y: 50 }
 };
 
 const colorLegendConfig = {
     svgElement: '#color-legend-vis',
     width: 150,
-    height: 240,
+    height: 175,
     margin: {top: 25, right: 10, bottom: 40, left: 15}
 };
 
@@ -28,15 +28,14 @@ const colorLegendConfig = {
      width: 700,
      height: 600,
      margin: {top: 40, right: 20, bottom: 60, left: 35},
-     tooltipOffset: { x: 15, y: 50 }
+     tooltipOffset: { x: 15, y: 20 }
  };
 
  const histogramConfig = {
      svgElement: '#histogram-chart-vis',
      width: 760,
-     height: 40,
-     margin: {top: 25, right: 20, bottom: 0, left: 35},
-     contextMargin: {top: 25, right: 20, bottom: 0, left: 35}
+     height: 100,
+     margin: {top: 25, right: 20, bottom: 20, left: 35}
  };
 
 d3.csv('data/video_games.csv').then(data => {
@@ -61,7 +60,7 @@ d3.csv('data/video_games.csv').then(data => {
     let computedData = computeRollUpData(data);
     // Ref: - https://observablehq.com/@d3/color-schemes
     //      - https://www.learnui.design/tools/data-color-picker.html
-    const colorPallette = ["#003f5c","2f4b7c","#665191","#a05195","#d45087","#f95d6a","#ff7c43","#ffa600","#005c02","#327c2f","#14c990","#383838"];
+    const colorPallette = ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#bcbd22","#17becf"];
     const colorMap = new Map();
 
     const barChart = new StackedBarChart(barChartConfig, data, dispatch);
@@ -128,9 +127,10 @@ d3.csv('data/video_games.csv').then(data => {
         barChart.JPSales = computedData[key + 'JPSales'];
         barChart.WorldSales = computedData[key + 'WorldSales'];
         barChart.xValue = d => d[value];
+        barChart.groupBy = value;
         barChart.updateVis();
 
-        updateColorMap(computedData[key + 'NASales']);
+        updateColorMap(groupBy);
         colorLegend.colorMap = colorMap;
         colorLegend.sales = computedData[key + 'WorldSales'];
         colorLegend.updateVis();
@@ -145,11 +145,31 @@ d3.csv('data/video_games.csv').then(data => {
         updateScatterPlot();
     }
 
-    function updateColorMap(salesData) {
+    function updateColorMap(groupBy) {
         colorMap.clear();
-        salesData.forEach(g => {
-            colorMap.set(g[0], colorPallette[colorMap.size]);
-        });
+
+        if(groupBy == 'Genre') {
+            colorMap.set('Action', colorPallette[0]);
+            colorMap.set('Misc', colorPallette[1]);
+            colorMap.set('Platform', colorPallette[2]);
+            colorMap.set('Puzzle', colorPallette[3]);
+            colorMap.set('Racing', colorPallette[4]);
+            colorMap.set('Role-Playing', colorPallette[5]);
+            colorMap.set('Simulation', colorPallette[6]);
+            colorMap.set('Sports', colorPallette[7]);
+            colorMap.set('Strategy', colorPallette[8]);
+        } else {
+            colorMap.set('Activision', colorPallette[0]);
+            colorMap.set('EA', colorPallette[1]);
+            colorMap.set('Konami', colorPallette[2]);
+            colorMap.set('Namco', colorPallette[3]);
+            colorMap.set('Nintendo', colorPallette[4]);
+            colorMap.set('Sega', colorPallette[5]);
+            colorMap.set('Sony', colorPallette[6]);
+            colorMap.set('THQ', colorPallette[7]);
+            colorMap.set('Ubisoft', colorPallette[8]);
+        }
+
         colorMap.set('World', '#faf8f7');
         colorMap.set('NorthAmerica', '#edd1d1');
         colorMap.set('Europe', '#d1e0ed');

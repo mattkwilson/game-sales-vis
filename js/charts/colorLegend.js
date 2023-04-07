@@ -36,9 +36,9 @@ class ColorLegend {
         const vis = this;
         // create our color legend text
        vis.chart.selectAll('text')
-        .data(vis.sales)
+        .data(vis.colorMap)
         .join("text")
-        .attr("fill", d => vis.colorMap.get(d[0]))
+        .attr("fill", d => d[1])
         .attr("x", function(d, i){ 
         return 10;
         })
@@ -51,11 +51,11 @@ class ColorLegend {
 
         // add circles
         vis.chart.selectAll('circle')
-        .data(vis.sales)
+        .data(vis.colorMap)
         .join("circle")
         .attr('r', 5)
         .attr('cx', 0)
         .attr('cy', (d, i) => -10 + (18*i))
-        .attr('fill', d => vis.colorMap.get(d[0]));
+        .attr('fill', d => d[1]);
     }
 }

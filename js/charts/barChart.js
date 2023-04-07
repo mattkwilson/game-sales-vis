@@ -51,18 +51,17 @@ class StackedBarChart {
             .attr('class', 'axis y-axis');
 
         // Append both axis titles
-        vis.chart.append('text')
+        vis.xAxisLabel = vis.chart.append('text')
             .attr('class', 'title')
             .attr('y', vis.height + 30)
             .attr('x', vis.width + 10)
             .attr('dy', '.71em')
-            .style('text-anchor', 'end')
-            .text('Category');
+            .style('text-anchor', 'end');
 
         vis.svg.append('text')
             .attr('class', 'title')
             .attr('x', 0)
-            .attr('y', 10)
+            .attr('y', 0)
             .attr('dy', '.71em')
             .text('Sales in Millions');
 
@@ -100,6 +99,8 @@ class StackedBarChart {
                 };
             })
         ];
+
+        vis.xAxisLabel.text(vis.groupBy);
 
         vis.xScale.domain(vis.data.map(vis.xValue));
         vis.yScale.domain([0, d3.max(vis.WorldSales, d => d[1])]);
