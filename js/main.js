@@ -12,7 +12,7 @@ const barChartConfig = {
     svgElement: '#bar-chart-vis',
     width: 800,
     height: 300,
-    margin: {top: 30, right: 20, bottom: 50, left: 40},
+    margin: {top: 30, right: 20, bottom: 50, left: 70},
     tooltipOffset: { x: 15, y: 50 }
 };
 
@@ -35,7 +35,7 @@ const colorLegendConfig = {
      svgElement: '#histogram-chart-vis',
      width: 760,
      height: 100,
-     margin: {top: 25, right: 20, bottom: 20, left: 35}
+     margin: {top: 25, right: 20, bottom: 50, left: 35}
  };
 
 d3.csv('data/video_games.csv').then(data => {
@@ -113,6 +113,7 @@ d3.csv('data/video_games.csv').then(data => {
         let filteredData = data.filter(d => d.Year >= selection.start && d.Year <= selection.end);
         scatterPlot.data = filteredData
         computedData = computeRollUpData(filteredData);
+        histogram.updateXaxis();
         updateData(groupBy);
     });
 
@@ -143,6 +144,7 @@ d3.csv('data/video_games.csv').then(data => {
         bubbleChart.updateVis();
 
         updateScatterPlot();
+        
     }
 
     function updateColorMap(groupBy) {

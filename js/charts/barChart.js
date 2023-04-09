@@ -65,6 +65,14 @@ class StackedBarChart {
             .attr('dy', '.71em')
             .text('Sales in Millions');
 
+        vis.svg.append('text')
+            .attr('class', 'chart-title')
+            .attr('x', vis.width/2)
+            .attr('y', 0)
+            .attr('dy', '.71em')
+            .text('Total Sales Stacked By Region')
+            .style('text-anchor', 'middle');;
+
         // Initialize stack generator 
         vis.stack = d3.stack()
             .keys(['NorthAmerica', 'Europe', 'Japan']);
@@ -73,13 +81,13 @@ class StackedBarChart {
         vis.tooltip = d3.select('#tooltip');
 
     // bar chart regional legend 
-    vis.svg.append("text").attr("x", vis.width - 75).attr("y", vis.height - 210).text("Region").style("font-size", "16px").style("font-weight", "700").attr("alignment-baseline", "middle")
-    vis.svg.append("circle").attr("cx",vis.width - 55 ).attr("cy", vis.height - 180 ).attr("r", 6).style("fill", "#edd1d1")
-    vis.svg.append("circle").attr("cx",vis.width - 55).attr("cy",vis.height - 160).attr("r", 6).style("fill", "#d1e0ed")
-    vis.svg.append("circle").attr("cx",vis.width - 55).attr("cy",vis.height - 140).attr("r", 6).style("fill", "#d1edd5")
-    vis.svg.append("text").attr("x", vis.width - 40).attr("y", vis.height - 180).text("North America").style("font-size", "15px").attr("alignment-baseline","middle")
-    vis.svg.append("text").attr("x", vis.width - 40).attr("y", vis.height - 160).text("Europe").style("font-size", "15px").attr("alignment-baseline","middle")
-    vis.svg.append("text").attr("x", vis.width - 40).attr("y", vis.height - 140).text("Japan").style("font-size", "15px").attr("alignment-baseline","middle");
+    vis.svg.append("text").attr("x", vis.width ).attr("y", vis.height - 210).text("Region").style("font-size", "12px").style("font-weight", "700").attr("alignment-baseline", "middle")
+    vis.svg.append("circle").attr("cx",vis.width ).attr("cy", vis.height - 180 ).attr("r", 6).style("fill", "#edd1d1")
+    vis.svg.append("circle").attr("cx",vis.width ).attr("cy",vis.height - 160).attr("r", 6).style("fill", "#d1e0ed")
+    vis.svg.append("circle").attr("cx",vis.width ).attr("cy",vis.height - 140).attr("r", 6).style("fill", "#d1edd5")
+    vis.svg.append("text").attr("x", vis.width + 10 ).attr("y", vis.height - 180).text("North America").style("font-size", "11px").attr("alignment-baseline","middle")
+    vis.svg.append("text").attr("x", vis.width + 10 ).attr("y", vis.height - 160).text("Europe").style("font-size", "11px").attr("alignment-baseline","middle")
+    vis.svg.append("text").attr("x", vis.width + 10 ).attr("y", vis.height - 140).text("Japan").style("font-size", "11px").attr("alignment-baseline","middle");
 
     }
 
