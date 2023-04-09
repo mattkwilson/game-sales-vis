@@ -83,7 +83,7 @@ class HistogramChart {
                     vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
                 } else {
                     // no range selected, show all data (full time period)
-                    vis.start = 1980;
+                    vis.start = 1978;
                     vis.end = 2022;
                     vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
                 }
