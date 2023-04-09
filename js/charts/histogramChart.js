@@ -95,7 +95,7 @@ class HistogramChart {
          .attr('y', vis.height + 30)
          .attr('x', vis.width/2)
          .attr('dy', '.71em')
-         .text('Selected Year Range: 1980-2022')
+         .text('Selected Year Range: 1978-2022')
          .style('text-anchor', 'middle');
 
         vis.svg.append('text')
