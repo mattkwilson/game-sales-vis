@@ -60,34 +60,35 @@ class StackedBarChart {
 
         vis.svg.append('text')
             .attr('class', 'title')
-            .attr('x', 0)
-            .attr('y', 0)
+            .attr('x', 10)
+            .attr('y', 30)
             .attr('dy', '.71em')
             .text('Sales in Millions');
 
         vis.svg.append('text')
             .attr('class', 'chart-title')
-            .attr('x', vis.width/2)
+            .attr('x', vis.width/2 + 50)
             .attr('y', 0)
             .attr('dy', '.71em')
-            .text('Total Sales Stacked By Region')
+            .text('Total Sales Stacked by Region')
             .style('text-anchor', 'middle');;
 
         // Initialize stack generator 
         vis.stack = d3.stack()
-            .keys(['NorthAmerica', 'Europe', 'Japan']);
+            .keys(['NorthAmerica', 'Europe', 'Japan'])
+            .order(d3.stackOrderDescending);
 
         vis.selection = [];
         vis.tooltip = d3.select('#tooltip');
 
     // bar chart regional legend 
-    vis.svg.append("text").attr("x", vis.width ).attr("y", vis.height - 210).text("Region").style("font-size", "12px").style("font-weight", "700").attr("alignment-baseline", "middle")
-    vis.svg.append("circle").attr("cx",vis.width ).attr("cy", vis.height - 180 ).attr("r", 6).style("fill", "#edd1d1")
-    vis.svg.append("circle").attr("cx",vis.width ).attr("cy",vis.height - 160).attr("r", 6).style("fill", "#d1e0ed")
-    vis.svg.append("circle").attr("cx",vis.width ).attr("cy",vis.height - 140).attr("r", 6).style("fill", "#d1edd5")
-    vis.svg.append("text").attr("x", vis.width + 10 ).attr("y", vis.height - 180).text("North America").style("font-size", "11px").attr("alignment-baseline","middle")
-    vis.svg.append("text").attr("x", vis.width + 10 ).attr("y", vis.height - 160).text("Europe").style("font-size", "11px").attr("alignment-baseline","middle")
-    vis.svg.append("text").attr("x", vis.width + 10 ).attr("y", vis.height - 140).text("Japan").style("font-size", "11px").attr("alignment-baseline","middle");
+    vis.svg.append("text").attr("x", vis.width - 30).attr("y", vis.height - 155).text("Region").style("font-size", "17px").style("font-weight", "700").attr("alignment-baseline", "middle")
+    vis.svg.append("circle").attr("cx",vis.width - 20).attr("cy", vis.height - 130).attr("r", 6).style("fill", "#edd1d1")
+    vis.svg.append("circle").attr("cx",vis.width - 20).attr("cy",vis.height - 110).attr("r", 6).style("fill", "#d1e0ed")
+    vis.svg.append("circle").attr("cx",vis.width - 20).attr("cy",vis.height - 90).attr("r", 6).style("fill", "#d1edd5")
+    vis.svg.append("text").attr("x", vis.width - 8).attr("y", vis.height - 130).text("North America").style("font-size", "15px").attr("alignment-baseline","middle")
+    vis.svg.append("text").attr("x", vis.width - 8).attr("y", vis.height - 110).text("Europe").style("font-size", "15px").attr("alignment-baseline","middle")
+    vis.svg.append("text").attr("x", vis.width - 8).attr("y", vis.height - 90).text("Japan").style("font-size", "15px").attr("alignment-baseline","middle");
 
     }
 
@@ -104,19 +105,20 @@ class StackedBarChart {
         }
 
         const finalSales = mergeArrays(vis.EUSales, vis.JPSales, vis.NASales);
+        finalSales.sort((a,b) => b[1] + b[2] + b[3] - a[1] - a[2] - a[3]);
 
-        function maxMinSales(arr1) {
-            var arr4 = [];
-            for (var i = 0; i < arr1.length; i++) {
-                arr4.push(arr1[i][1], arr1[i][2], arr1[i][1]);
-            }
-            return arr4;
-        }
-        const allSales = maxMinSales(finalSales);
+        // function maxMinSales(arr1) {
+        //     var arr4 = [];
+        //     for (var i = 0; i < arr1.length; i++) {
+        //         arr4.push(arr1[i][1], arr1[i][2], arr1[i][1]);
+        //     }
+        //     return arr4;
+        // }
+        // const allSales = maxMinSales(finalSales);
 
-        vis.maxSales = Math.round(d3.max(allSales));
-        vis.minSales = Math.round(d3.min(allSales));
-        vis.meanSales = Math.round(d3.mean(allSales));
+        // vis.maxSales = Math.round(d3.max(allSales));
+        // vis.minSales = Math.round(d3.min(allSales));
+        // vis.meanSales = Math.round(d3.mean(allSales));
 
         const rawData = [
             ...finalSales.map(d => {
@@ -130,11 +132,9 @@ class StackedBarChart {
         ];
 
         vis.xAxisLabel.text(vis.groupBy);
-
-        vis.xScale.domain(vis.data.map(vis.xValue));
+        vis.xScale.domain(finalSales.map(d => d[0]));
         vis.yScale.domain([0, d3.max(vis.WorldSales, d => d[1])]);
-
-
+        
         // Call stack generator on the dataset
         vis.stackedData = vis.stack(rawData);
         vis.stackedData.forEach(element => {
@@ -142,6 +142,7 @@ class StackedBarChart {
                 arr.region = element.key;
             });
         });
+
         this.renderVis();
     }
 

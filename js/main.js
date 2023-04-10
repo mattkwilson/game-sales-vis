@@ -11,7 +11,7 @@ const barChartConfig = {
     svgElement: '#bar-chart-vis',
     width: 800,
     height: 300,
-    margin: {top: 30, right: 20, bottom: 50, left: 70},
+    margin: {top: 60, right: 20, bottom: 50, left: 70},
     tooltipOffset: { x: 15, y: 50 }
 };
 
@@ -26,7 +26,7 @@ const colorLegendConfig = {
      svgElement: '#scatter-plot-vis',
      width: 700,
      height: 600,
-     margin: {top: 40, right: 20, bottom: 60, left: 35},
+     margin: {top: 80, right: 20, bottom: 60, left: 70},
      tooltipOffset: { x: 15, y: 20 },
      defaultMaxDomain: 40
  };
@@ -34,8 +34,8 @@ const colorLegendConfig = {
  const histogramConfig = {
      svgElement: '#histogram-chart-vis',
      width: 760,
-     height: 100,
-     margin: {top: 25, right: 20, bottom: 50, left: 35}
+     height: 120,
+     margin: {top: 25, right: 20, bottom: 60, left: 35}
  };
 
  const defaultYearSelection = {
@@ -89,14 +89,12 @@ d3.csv('data/video_games.csv').then(data => {
     updateData(groupBy);
 
      // Size Legend For bubble cart 
-     d3.select('#size-legend').append("circle").attr("cx", 10).attr("cy", 80).attr("r", 6).style("opacity", "0.8")
-     d3.select('#size-legend').append("circle").attr("cx", 100).attr("cy", 80).attr("r", 12).style("opacity", "0.8")
-     d3.select('#size-legend').append("circle").attr("cx", 200).attr("cy", 80).attr("r", 24).style("opacity", "0.8")
-     d3.select('#size-legend').append("text").attr('id','min').attr("x", 0).attr("y", 120).text(barChart.minSales + ' Million').style("font-size", "15px").attr("alignment-baseline", "middle")
-     d3.select('#size-legend').append("text").attr('id','mean').attr("x", 80).attr("y", 120).text(barChart.meanSales + ' Million').style("font-size", "15px").attr("alignment-baseline", "middle")
-     d3.select('#size-legend').append("text").attr('id','max').attr("x", 170).attr("y", 120).text(barChart.maxSales + ' Million').style("font-size", "15px").attr("alignment-baseline", "middle")
-    
-
+     let sizeLegend = d3.select('#size-legend');
+     sizeLegend.attr('width', '200px').attr('height', '80px');
+     sizeLegend.append("circle").attr('id', 'circle-min').attr("cx", 45).attr("cy", 30).attr("r", bubbleChart.scaleMin.r).style("opacity", "0.8")
+     sizeLegend.append("circle").attr('id', 'circle-max').attr("cx", 150).attr("cy", 30).attr("r", bubbleChart.scaleMax.r).style("opacity", "0.8")
+     sizeLegend.append("text").attr('id','text-min').attr("x", 20).attr("y", 70).text(bubbleChart.scaleMin.sales + ' M').style("font-size", "15px")
+     sizeLegend.append("text").attr('id','text-max').attr("x", 125).attr("y", 70).text(bubbleChart.scaleMax.sales + ' M').style("font-size", "15px")
 
     d3.select('#groupBySelect').on('change', e => {
         updateData(document.getElementById('groupBySelect').value);
@@ -117,11 +115,7 @@ d3.csv('data/video_games.csv').then(data => {
     });
 
     dispatch.on('reset-selection', d => {
-        selectedElements = [];
-        bubbleChart.selection = selectedElements;
-        bubbleChart.updateVis();
-        barChart.selection = selectedElements;
-        barChart.updateVis();
+        resetSelection();
     });
 
     dispatch.on('yearRangeChanged', selection => {
@@ -129,11 +123,20 @@ d3.csv('data/video_games.csv').then(data => {
         scatterPlot.data = filteredData
         computedData = computeRollUpData(filteredData);
         updateData(groupBy);
+        resetSelection();
     });
 
     dispatch.call('yearRangeChanged', null, defaultYearSelection);
 
     // Helpers
+    
+    function resetSelection() {
+        selectedElements = [];
+        bubbleChart.selection = selectedElements;
+        bubbleChart.updateVis();
+        barChart.selection = selectedElements;
+        barChart.updateVis();
+    }
 
     function updateData(value) {
         groupBy = value;
@@ -204,6 +207,7 @@ d3.csv('data/video_games.csv').then(data => {
         result.publisherEUSales = d3.rollups(data, g => d3.sum(g, d => d.EU_Sales), d => d.Publisher);
         result.publisherJPSales = d3.rollups(data, g => d3.sum(g, d => d.JP_Sales), d => d.Publisher);
         result.publisherWorldSales = d3.rollups(data, g => d3.sum(g, d => d.Global_Sales), d => d.Publisher);
+
         return result;
     }
 
@@ -214,11 +218,9 @@ d3.csv('data/video_games.csv').then(data => {
     }
 
     function updateSizeLegend(){
-        const min = d3.select("#min");
-        const mean = d3.select('#mean');
-        const max = d3.select('#max');
-        min.text(barChart.minSales + ' Million');
-        mean.text(barChart.meanSales + ' Million');
-        max.text(barChart.maxSales + ' Million');
+        d3.select("#text-min").text(bubbleChart.scaleMin.sales + ' M');
+        d3.select('#text-max').text(bubbleChart.scaleMax.sales + ' M');
+        d3.select("#circle-min").attr('r', bubbleChart.scaleMin.r);
+        d3.select('#circle-max').attr('r', bubbleChart.scaleMax.r);
     }
 });
