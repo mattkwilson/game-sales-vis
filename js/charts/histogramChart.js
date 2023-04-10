@@ -8,7 +8,7 @@ class HistogramChart {
      * @param {Object}
      * @param {Array}
      */
-    constructor(_config, _dispatcher, _data) {
+    constructor(_config, _dispatcher, _defaultYearSelection, _data) {
         this.config = {
             parentElement: _config.svgElement,
             width:  _config.width,
@@ -20,6 +20,7 @@ class HistogramChart {
             return {Year: key, Count:value};
         }).filter(d => d.Year).sort((a, b) => a.Year > b.Year ? 1 : -1);
         this.dispatcher = _dispatcher;
+        this.defaultYearSelection = _defaultYearSelection;
         this.initVis();
     }
 
@@ -74,15 +75,7 @@ class HistogramChart {
         vis.brush = d3.brushX()
             .extent([[0, 0], [vis.width, vis.height]])
             .on('end', function({selection}) {
-                if (selection) {
-                    // Convert given pixel coordinates (range: [x0,x1]) into year
-                    let start = vis.xScaleContext.invert(selection[0])
-                    let end = vis.xScaleContext.invert(selection[1])
-                    vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
-                } else {
-                    // no range selected, show all data (full time period)
-                    vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
-                }
+                vis.brushed(selection);
             });
 
         vis.svg.append('text')
@@ -132,9 +125,36 @@ class HistogramChart {
         vis.xAxisContextG.call(vis.xAxisContext);
 
         // Update the brush and define a default position
-        const defaultBrushSelection = [vis.xScaleContext(2015), vis.xScaleContext.range()[1]];
+        const defaultBrushSelection = [vis.xScaleContext(vis.defaultYearSelection.start),
+            vis.xScaleContext(vis.defaultYearSelection.end)];
         vis.brushG
             .call(vis.brush)
             .call(vis.brush.move, defaultBrushSelection);
+    }
+
+    /**
+     * React to brush events
+     */
+    brushed(selection) {
+        let vis = this;
+        // Check if the brush is still active or if it has been removed
+        if (selection) {
+            // Convert given pixel coordinates (range: [x0,x1]) into year
+
+            let start = vis.xScaleContext.invert(selection[0]);
+            let end = vis.xScaleContext.invert(selection[1]);
+            if (end - start < 1){
+                start = Math.round(start);
+                end = Math.round(start) + 1;
+                let brushSelection = [vis.xScaleContext(start), vis.xScaleContext(end)];
+                vis.brushG
+                    .call(vis.brush)
+                    .call(vis.brush.move, brushSelection);
+            }
+            vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
+        } else {
+            // no range selected, show all data (full time period)
+            vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
+        }
     }
 }
