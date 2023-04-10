@@ -162,14 +162,16 @@ class HistogramChart {
                     .call(vis.brush)
                     .call(vis.brush.move, brushSelection);
             }
+            vis.xAxisLabel.text("Selected Year Range: " + Math.round(vis.start) + "-" + Math.round(vis.end));
             vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
         } else {
             // no range selected, show all data (full time period)
-            vis.xAxisLabel.text('Selected Year Range: ' + vis.defaultYearSelection.start + '-' + vis.defaultYearSelection.end);
-            vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
-        }
+            let start =vis.xScaleContext.domain()[0];
+            let end = vis.xScaleContext.domain()[1];
 
-        vis.xAxisLabel.text("Selected Year Range: " + Math.round(vis.start) + "-" + Math.round(vis.end));
+            vis.xAxisLabel.text('Selected Year Range: ' + start + '-' + end);
+            vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
+        }
 
     }
 }
