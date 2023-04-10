@@ -108,7 +108,7 @@ class StackedBarChart {
         function maxMinSales(arr1) {
             var arr4 = [];
             for (var i = 0; i < arr1.length; i++) {
-                arr4.push(arr1[i][1], arr1[i][2], arr1[i][1]);
+                arr4.push(arr1[i][1], arr1[i][2], arr1[i][3]);
             }
             return arr4;
         }
