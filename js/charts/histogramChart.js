@@ -78,6 +78,15 @@ class HistogramChart {
                 vis.brushed(selection);
             });
 
+         // Append both axis titles
+         vis.xAxisLabel = vis.context.append('text')
+         .attr('class', 'title')
+         .attr('y', vis.height + 30)
+         .attr('x', vis.width/2)
+         .attr('dy', '.71em')
+         .text('Selected Year Range: 1978-2022')
+         .style('text-anchor', 'middle');
+
         vis.svg.append('text')
             .attr('class', 'title')
             .attr('x', 0)
@@ -96,7 +105,6 @@ class HistogramChart {
 
         vis.xValue = d => d.Year;
         vis.yValue = d => d.Count;
-
 
         vis.area = d3.area()
             .x(d => vis.xScaleContext(vis.xValue(d)))
