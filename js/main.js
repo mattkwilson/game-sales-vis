@@ -1,5 +1,4 @@
 
- // EXAMPLE
  const bubbleChartConfig = {
     svgElementId: 'bubble-chart-vis',
     width: 400,
@@ -28,7 +27,8 @@ const colorLegendConfig = {
      width: 700,
      height: 600,
      margin: {top: 40, right: 20, bottom: 60, left: 35},
-     tooltipOffset: { x: 15, y: 20 }
+     tooltipOffset: { x: 15, y: 20 },
+     defaultMaxDomain: 40
  };
 
  const histogramConfig = {
@@ -36,6 +36,11 @@ const colorLegendConfig = {
      width: 760,
      height: 100,
      margin: {top: 25, right: 20, bottom: 50, left: 35}
+ };
+
+ const defaultYearSelection = {
+     start: 2015,
+     end: 2022
  };
 
 d3.csv('data/video_games.csv').then(data => {
@@ -67,17 +72,17 @@ d3.csv('data/video_games.csv').then(data => {
     const bubbleChart = new BubbleChart(bubbleChartConfig, data, dispatch);
     const colorLegend = new ColorLegend(colorLegendConfig, data, dispatch);
     const scatterPlot = new ScatterPlot(scatterPlotConfig, colorMap, groupBy, data);
-    const histogram = new HistogramChart(histogramConfig, dispatch, data);
+    const histogram = new HistogramChart(histogramConfig, dispatch, defaultYearSelection, data);
 
     // Region Color Legend
-    d3.select('#region-legend').attr('width', colorLegendConfig.width).attr('height', '80px');
-    d3.select('#region-legend').append("circle").attr("cx", 15).attr("cy", 20).attr("r", 6).style("fill", "#edd1d1")
-    d3.select('#region-legend').append("circle").attr("cx", 15).attr("cy", 40).attr("r", 6).style("fill", "#d1e0ed")
-    d3.select('#region-legend').append("circle").attr("cx", 15).attr("cy", 60).attr("r", 6).style("fill", "#d1edd5")
-    // d3.select('#region-legend').append("text").attr("x", 10).attr("y", 18).text("Region").style("font-size", "16px").style("font-weight", "700").attr("alignment-baseline", "middle")
-    d3.select('#region-legend').append("text").attr("x", 26).attr("y", 20).text("North America").style("font-size", "15px").attr("alignment-baseline", "middle")
-    d3.select('#region-legend').append("text").attr("x", 26).attr("y", 40).text("Europe").style("font-size", "15px").attr("alignment-baseline", "middle")
-    d3.select('#region-legend').append("text").attr("x", 26).attr("y", 60).text("Japan").style("font-size", "15px").attr("alignment-baseline", "middle")
+    let legend = d3.select('#region-legend');
+    legend.attr('width', colorLegendConfig.width).attr('height', '80px');
+    legend.append("circle").attr("cx", 15).attr("cy", 20).attr("r", 6).style("fill", "#edd1d1")
+    legend.append("circle").attr("cx", 15).attr("cy", 40).attr("r", 6).style("fill", "#d1e0ed")
+    legend.append("circle").attr("cx", 15).attr("cy", 60).attr("r", 6).style("fill", "#d1edd5")
+    legend.append("text").attr("x", 26).attr("y", 20).text("North America").style("font-size", "15px").attr("alignment-baseline", "middle")
+    legend.append("text").attr("x", 26).attr("y", 40).text("Europe").style("font-size", "15px").attr("alignment-baseline", "middle")
+    legend.append("text").attr("x", 26).attr("y", 60).text("Japan").style("font-size", "15px").attr("alignment-baseline", "middle")
 
     // -----
 
@@ -127,6 +132,7 @@ d3.csv('data/video_games.csv').then(data => {
         updateData(groupBy);
     });
 
+    dispatch.call('yearRangeChanged', null, defaultYearSelection);
 
     // Helpers
 
@@ -207,6 +213,7 @@ d3.csv('data/video_games.csv').then(data => {
         scatterPlot.groupby = groupBy;
         scatterPlot.updateVis();
     }
+
     function updateSizeLegend(){
         const min = d3.select("#min");
         const mean = d3.select('#mean');

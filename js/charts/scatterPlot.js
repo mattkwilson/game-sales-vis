@@ -6,7 +6,8 @@ class ScatterPlot {
             width: config_.width,
             height: config_.height,
             margin: config_.margin,
-            tooltipOffset: config_.tooltipOffset
+            tooltipOffset: config_.tooltipOffset,
+            defaultMaxDomain: config_.defaultMaxDomain
         };
         this.data = data_;
         this.colorMap = colorMap_;
@@ -90,8 +91,9 @@ class ScatterPlot {
         // Specify accessor functions
         vis.xValue = d => d.Rating;
         vis.yValue = d => d.Global_Sales;
-
-        vis.yScale.domain([0, Math.ceil(d3.max(vis.data, vis.yValue) / 10.0) * 10]);
+        let domainMaxVal = Math.ceil(d3.max(vis.data, vis.yValue) / 10.0) * 10;
+        // if max value is 0, set a default in order to have some axis
+        vis.yScale.domain([0, domainMaxVal ? domainMaxVal : vis.config.defaultMaxDomain]);
 
         this.renderVis();
     }
