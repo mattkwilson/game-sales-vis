@@ -107,19 +107,6 @@ class StackedBarChart {
         const finalSales = mergeArrays(vis.EUSales, vis.JPSales, vis.NASales);
         finalSales.sort((a,b) => b[1] + b[2] + b[3] - a[1] - a[2] - a[3]);
 
-        // function maxMinSales(arr1) {
-        //     var arr4 = [];
-        //     for (var i = 0; i < arr1.length; i++) {
-        //         arr4.push(arr1[i][1], arr1[i][2], arr1[i][1]);
-        //     }
-        //     return arr4;
-        // }
-        // const allSales = maxMinSales(finalSales);
-
-        // vis.maxSales = Math.round(d3.max(allSales));
-        // vis.minSales = Math.round(d3.min(allSales));
-        // vis.meanSales = Math.round(d3.mean(allSales));
-
         const rawData = [
             ...finalSales.map(d => {
                 return {
