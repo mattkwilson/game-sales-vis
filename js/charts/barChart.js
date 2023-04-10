@@ -105,6 +105,18 @@ class StackedBarChart {
 
         const finalSales = mergeArrays(vis.EUSales, vis.JPSales, vis.NASales);
 
+        function maxMinSales(arr1) {
+            var arr4 = [];
+            for (var i = 0; i < arr1.length; i++) {
+                arr4.push(arr1[i][1], arr1[i][2], arr1[i][1]);
+            }
+            return arr4;
+        }
+        const allSales = maxMinSales(finalSales);
+
+        vis.maxSales = Math.round(d3.max(allSales));
+        vis.minSales = Math.round(d3.min(allSales));
+        vis.meanSales = Math.round(d3.mean(allSales));
 
         const rawData = [
             ...finalSales.map(d => {
