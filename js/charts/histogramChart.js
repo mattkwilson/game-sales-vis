@@ -84,7 +84,6 @@ class HistogramChart {
          .attr('y', vis.height + 30)
          .attr('x', vis.width/2)
          .attr('dy', '.71em')
-         .text('Selected Year Range: 1978-2022')
          .style('text-anchor', 'middle');
 
         vis.svg.append('text')
@@ -138,6 +137,8 @@ class HistogramChart {
         vis.brushG
             .call(vis.brush)
             .call(vis.brush.move, defaultBrushSelection);
+        vis.xAxisLabel.text('Selected Year Range: ' + vis.defaultYearSelection.start + '-' + vis.defaultYearSelection.end);
+        
     }
 
     /**
@@ -151,9 +152,11 @@ class HistogramChart {
 
             let start = vis.xScaleContext.invert(selection[0]);
             let end = vis.xScaleContext.invert(selection[1]);
+            vis.start = vis.xScaleContext.invert(selection[0]);
+            vis.end = vis.xScaleContext.invert(selection[1]);
             if (end - start < 1){
-                start = Math.round(start);
-                end = Math.round(start) + 1;
+                 start = Math.round(start);
+                 end = Math.round(start) + 1;
                 let brushSelection = [vis.xScaleContext(start), vis.xScaleContext(end)];
                 vis.brushG
                     .call(vis.brush)
@@ -162,7 +165,11 @@ class HistogramChart {
             vis.dispatcher.call('yearRangeChanged', null, {start: start, end: end});
         } else {
             // no range selected, show all data (full time period)
+            vis.xAxisLabel.text('Selected Year Range: ' + vis.defaultYearSelection.start + '-' + vis.defaultYearSelection.end);
             vis.dispatcher.call('yearRangeChanged', null, {start: vis.xScaleContext.domain()[0], end: vis.xScaleContext.domain()[1]});
         }
+
+        vis.xAxisLabel.text("Selected Year Range: " + Math.round(vis.start) + "-" + Math.round(vis.end));
+
     }
 }
