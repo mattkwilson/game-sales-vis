@@ -68,10 +68,10 @@ class ScatterPlot {
        
        vis.svg.append('text')
             .attr('class', 'chart-title')
-            .attr('x', vis.width/2 + 40)
+            .attr('x', vis.width/2 + 60)
             .attr('y', 0)
             .attr('dy', '.71em')
-            .text('Individual Games Global Sales vs Rating')
+            .text('Global Sales vs Rating for Individual Games')
             .style('text-anchor', 'middle');;
 
         vis.svg.append('text')

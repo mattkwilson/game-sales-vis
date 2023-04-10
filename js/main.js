@@ -81,6 +81,14 @@ d3.csv('data/video_games.csv').then(data => {
 
     // -----
 
+    // Size Legend For bubble cart 
+    d3.select('#size-legend').append("circle").attr("cx", 10).attr("cy", 80).attr("r", 6).style("opacity", "0.8")
+    d3.select('#size-legend').append("circle").attr("cx", 100).attr("cy", 80).attr("r", 12).style("opacity", "0.8")
+    d3.select('#size-legend').append("circle").attr("cx", 200).attr("cy", 80).attr("r", 24).style("opacity", "0.8")
+    d3.select('#size-legend').append("text").attr("x", 0).attr("y", 120).text("1 Million").style("font-size", "15px").attr("alignment-baseline", "middle")
+    d3.select('#size-legend').append("text").attr("x", 80).attr("y", 120).text("10 Million").style("font-size", "15px").attr("alignment-baseline", "middle")
+    d3.select('#size-legend').append("text").attr("x", 170).attr("y", 120).text("100 Million").style("font-size", "15px").attr("alignment-baseline", "middle")
+
     updateData(groupBy);
 
     d3.select('#groupBySelect').on('change', e => {
