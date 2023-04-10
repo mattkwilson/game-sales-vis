@@ -85,24 +85,37 @@ class BubbleChart {
         
         d3.pack().size([vis.width, vis.height])(vis.hierarchy);
         
-        let maxElement = vis.hierarchy.children[2].children[0];
+        let maxElement = {value: 0};
         vis.hierarchy.children.forEach(region => {
-            region.children.forEach(e => {
-                if(e.value > maxElement.value) {
-                    maxElement = e;
-                }
-            })
+            if(region.children != null) {
+                region.children.forEach(e => {
+                    if(e.value > maxElement.value) {
+                        maxElement = e;
+                    }
+                })
+            }
         });
-
-        const scale = Math.sqrt(maxElement.value) / maxElement.r;
-        vis.scaleMin = { r: 5, sales: d3.format('$.2f')((scale * 5)*(scale * 5))};
-        vis.scaleMax = { r: 20, sales: d3.format('$.2f')((scale * 20)*(scale * 20))};
+        if (maxElement.value != 0) {
+            const scale = Math.sqrt(maxElement.value) / maxElement.r;
+            vis.scaleMin = { r: 5, sales: d3.format('$.2f')((scale * 5)*(scale * 5))};
+            vis.scaleMax = { r: 20, sales: d3.format('$.2f')((scale * 20)*(scale * 20))};
+        } else {
+            vis.scaleMin = { r: 5, sales: d3.format('$.2f')(0) };
+            vis.scaleMax = { r: 5, sales: d3.format('$.2f')(0) };
+        }
 
         this.renderVis();
     }
 
     renderVis() {
         const vis = this;
+
+        if(isNaN(vis.hierarchy.r)) {
+            vis.chart.selectAll('circle').style('display', 'none');
+            return;
+        } 
+
+        vis.chart.selectAll('circle').style('display', 'block');
 
         const hierarchyData = vis.chart.selectAll('circle').data(vis.hierarchy);
 
