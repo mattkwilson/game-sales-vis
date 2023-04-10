@@ -128,7 +128,6 @@ d3.csv('data/video_games.csv').then(data => {
         let filteredData = data.filter(d => d.Year >= selection.start && d.Year <= selection.end);
         scatterPlot.data = filteredData
         computedData = computeRollUpData(filteredData);
-        histogram.updateXaxis();
         updateData(groupBy);
     });
 
