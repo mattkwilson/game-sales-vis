@@ -78,10 +78,9 @@ class ScatterPlot {
         vis.svg.append('text')
             .attr('class', 'title')
             .attr('x', 0)
-            .attr('y', 0)
+            .attr('y', 40)
             .attr('dy', '.71em')
-            .text('Sales in Millions')
-            .attr("y", 5);
+            .text('Sales in Millions');
 
         vis.updateVis();
     }

@@ -84,6 +84,19 @@ class BubbleChart {
                             .sum(d => d.sales);
         
         d3.pack().size([vis.width, vis.height])(vis.hierarchy);
+        
+        let maxElement = vis.hierarchy.children[2].children[0];
+        vis.hierarchy.children.forEach(region => {
+            region.children.forEach(e => {
+                if(e.value > maxElement.value) {
+                    maxElement = e;
+                }
+            })
+        });
+
+        const scale = Math.sqrt(maxElement.value) / maxElement.r;
+        vis.scaleMin = { r: 5, sales: d3.format('$.2f')((scale * 5)*(scale * 5))};
+        vis.scaleMax = { r: 20, sales: d3.format('$.2f')((scale * 20)*(scale * 20))};
 
         this.renderVis();
     }

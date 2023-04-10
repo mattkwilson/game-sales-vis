@@ -81,7 +81,7 @@ class HistogramChart {
          // Append both axis titles
          vis.xAxisLabel = vis.context.append('text')
          .attr('class', 'title')
-         .attr('y', vis.height + 30)
+         .attr('y', vis.height + 40)
          .attr('x', vis.width/2)
          .attr('dy', '.71em')
          .style('text-anchor', 'middle');
