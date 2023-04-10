@@ -137,6 +137,12 @@ class StackedBarChart {
 
         const vis = this;
 
+        vis.svg.on('click', (e, d) => {
+            if(e.target.id == 'bar-chart-vis') {
+                vis.dispatch.call('reset-selection', e, d);
+            }
+        });
+
         vis.chart.selectAll('.category')
             .data(vis.stackedData)
             .join('g')

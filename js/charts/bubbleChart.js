@@ -117,6 +117,12 @@ class BubbleChart {
 
         vis.chart.selectAll('circle').style('display', 'block');
 
+        vis.svg.on('click', (e, d) => {
+            if(e.target.id == 'bubble-chart-vis') {
+                vis.dispatch.call('reset-selection', e, d);
+            }
+        });
+
         const hierarchyData = vis.chart.selectAll('circle').data(vis.hierarchy);
 
         hierarchyData.join('circle')
@@ -139,10 +145,11 @@ class BubbleChart {
                         .on('click', (e, d) => {
                             switch(d.id) {
                                 case 'World':
+                                    vis.dispatch.call('reset-selection', e, d);
+                                    break;
                                 case 'NorthAmerica':
                                 case 'Europe':
                                 case 'Japan':
-                                    vis.dispatch.call('reset-selection', e, d);
                                     break;
                                 default:
                                     vis.dispatch.call('selection-change', e, d);
