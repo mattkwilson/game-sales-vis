@@ -35,7 +35,7 @@ const colorLegendConfig = {
      svgElement: '#histogram-chart-vis',
      width: 760,
      height: 120,
-     margin: {top: 25, right: 20, bottom: 60, left: 35}
+     margin: {top: 40, right: 30, bottom: 50, left: 50}
  };
 
  const defaultYearSelection = {
@@ -88,7 +88,7 @@ d3.csv('data/video_games.csv').then(data => {
 
     updateData(groupBy);
 
-     // Size Legend For bubble cart 
+     // Size Legend For bubble chart
      let sizeLegend = d3.select('#size-legend');
      sizeLegend.attr('width', '200px').attr('height', '80px');
      sizeLegend.append("circle").attr('id', 'circle-min').attr("cx", 45).attr("cy", 30).attr("r", bubbleChart.scaleMin.r).style("opacity", "0.8")
@@ -217,7 +217,7 @@ d3.csv('data/video_games.csv').then(data => {
         scatterPlot.updateVis();
     }
 
-    function updateSizeLegend(){
+    function updateSizeLegend() {
         d3.select("#text-min").text(bubbleChart.scaleMin.sales + ' M');
         d3.select('#text-max').text(bubbleChart.scaleMax.sales + ' M');
         d3.select("#circle-min").attr('r', bubbleChart.scaleMin.r);

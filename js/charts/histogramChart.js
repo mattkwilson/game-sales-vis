@@ -44,7 +44,9 @@ class HistogramChart {
         vis.xAxisContext = d3.axisBottom(vis.xScaleContext)
             .tickSizeOuter(0)
             .tickFormat(d3.format(".0f"));
-        vis.yAxisContext = d3.axisLeft(vis.yScaleContext).tickSizeOuter(0);
+        vis.yAxisContext = d3.axisLeft(vis.yScaleContext)
+            .tickSizeOuter(0)
+            .ticks(2);
 
         // Define size of SVG drawing area
         vis.svg = d3.select(vis.config.parentElement)
@@ -81,17 +83,37 @@ class HistogramChart {
          // Append both axis titles
          vis.xAxisLabel = vis.context.append('text')
          .attr('class', 'title')
-         .attr('y', vis.height + 40)
-         .attr('x', vis.width/2)
+         .attr('y', -25)
+         .attr('x', vis.width - 100)
          .attr('dy', '.71em')
          .style('text-anchor', 'middle');
 
         vis.svg.append('text')
             .attr('class', 'title')
+            .attr('y', vis.height + 70)
+            .attr('x', vis.width - 0)
+            .attr('dy', '.71em')
+            .text('Year');
+
+        vis.svg.append('text')
+            .attr('class', 'title')
             .attr('x', 0)
+            .attr('y', 20)
+            .attr('dy', '.71em')
+            .text('Game Count');
+
+        vis.svg.append('text')
+            .attr('x', 0)
+            .attr('y', vis.height + 70)
+            .attr('dy', '.71em')
+            .text('Select an area of the chart to filter by year range.');
+
+        vis.svg.append('text')
+            .attr('class', 'chart-title')
+            .attr('x', vis.width / 2 - 120)
             .attr('y', 0)
             .attr('dy', '.71em')
-            .text('Time Range Filter:');
+            .text('Video Game Releases');
 
         vis.updateVis();
     }
@@ -130,6 +152,7 @@ class HistogramChart {
 
         // Update the axes
         vis.xAxisContextG.call(vis.xAxisContext);
+        vis.yAxisContextG.call(vis.yAxisContext);
 
         // Update the brush and define a default position
         const defaultBrushSelection = [vis.xScaleContext(vis.defaultYearSelection.start),
