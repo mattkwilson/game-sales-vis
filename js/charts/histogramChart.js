@@ -177,7 +177,9 @@ class HistogramChart {
             let end = vis.xScaleContext.invert(selection[1]);
             vis.start = vis.xScaleContext.invert(selection[0]);
             vis.end = vis.xScaleContext.invert(selection[1]);
-            if (end - start < 1){
+            // bug fix for invert not working as expected
+            // Example: vis.xScaleContext.invert(vis.xScaleContext(1980)) gives 1980.0000000000002 instead of 1980
+            if (end - start < 0.99){
                  start = Math.round(start);
                  end = Math.round(start) + 1;
                 let brushSelection = [vis.xScaleContext(start), vis.xScaleContext(end)];
