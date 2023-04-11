@@ -2,7 +2,7 @@
   "scripts": {
     "build": "npx tailwindcss -i ./css/tailwind.css -o ./dist/tailwind.css",
     "start": "start npx tailwindcss -i ./css/tailwind.css -o ./dist/tailwind.css --watch & live-server",
-    "dev-server": "live-server",
+    "server": "live-server",
     "tailwind": "npx tailwindcss -i ./css/tailwind.css -o ./dist/tailwind.css --watch"
   },
   "devDependencies": {
